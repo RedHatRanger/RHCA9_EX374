@@ -19,6 +19,7 @@ This lab covers the "Understand and use Git" objective of the EX374 exam. You'll
    ```bash
    git config --global user.name "Your Name"
    git config --global user.email "your.email@example.com"
+   git config --global push.default simple
    ```
 
 3. **Create a working directory**
