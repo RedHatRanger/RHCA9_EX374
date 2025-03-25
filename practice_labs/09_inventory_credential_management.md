@@ -1269,6 +1269,7 @@ These skills are essential for the "Manage inventories and credentials" objectiv
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Inventory Documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html)
 - [Ansible Dynamic Inventory Documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_dynamic_inventory.html)
 - [Ansible Inventory Plugins Documentation](https://docs.ansible.com/ansible/latest/plugins/inventory.html)
