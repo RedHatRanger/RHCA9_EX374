@@ -24,8 +24,8 @@ This lab covers the "Understand and use Git" objective of the EX374 exam. You'll
 
 3. **Create a working directory**
    ```bash
-   mkdir -p ~/ansible-labs/git-lab
-   cd ~/ansible-labs/git-lab
+   mkdir -p ~/git-repos
+   cd ~/git-repos
    ```
 
 ## Exercise 1: Cloning a Git Repository
@@ -34,8 +34,8 @@ In this exercise, you'll clone a sample Ansible repository.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/ansible/ansible-examples.git
-   cd ansible-examples
+   git clone https://github.com/RedHatRanger/devops-review.git
+   cd 
    ```
 
 2. **Explore the repository structure**
@@ -47,9 +47,9 @@ In this exercise, you'll clone a sample Ansible repository.
 
 3. **Create a new branch for your work**
    ```bash
-   git checkout -b my-ansible-work
+   git checkout -b exercise
    ```
-
+   
 ## Exercise 2: Creating and Modifying Files in a Git Repository
 
 1. **Create a simple playbook**
