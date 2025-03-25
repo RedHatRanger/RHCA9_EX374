@@ -821,6 +821,7 @@ These skills are essential for the "Delegate tasks" objective of the EX374 exam.
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Delegation Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html)
 - [Ansible Privilege Escalation Documentation](https://docs.ansible.com/ansible/latest/user_guide/become.html)
 - [Ansible Local Actions Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#local-actions)
