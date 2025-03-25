@@ -1,3 +1,4 @@
+```yaml
 # Instructions for setup by Luca Berton: https://www.youtube.com/watch?v=NlG8RGY3P8s
 # Use with the AAP Setup Bundle's install.sh script.
 
@@ -51,3 +52,4 @@ automationcatalog__pg_password='redhat'
 
 sso_keystore_password='redhat'
 sso_console_admin_password='redhat'
+```
