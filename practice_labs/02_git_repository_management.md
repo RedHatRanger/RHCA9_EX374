@@ -49,328 +49,248 @@ In this exercise, you'll clone a sample Ansible repository.
    ```bash
    git checkout -b exercise
    ```
-   
-## Exercise 2: Creating and Modifying Files in a Git Repository
+# Lab Change Instructions: Detailed
 
-1. **Create a simple playbook**
+Below is a step-by-step breakdown of **what** exact changes to make to go from the **pre-lab** state to the **finished** state, mirroring the book’s lab instructions.
+
+---
+## 1. Create a new branch named `exercise`
+
+From within the cloned **`devops-review`** directory:
+
+```bash
+git checkout -b exercise
+```
+
+---
+## 2. Add a name to the play in `site.yml`
+
+### Before
+```yaml
+---
+- hosts: all
+  become: true
+  roles:
+    - test
+```
+
+### After
+```yaml
+---
+- name: Sets the GRUB timeout  # <--- newly added line
+  hosts: all
+  become: true
+  roles:
+    - test
+```
+
+In other words, insert:
+
+```yaml
+name: Sets the GRUB timeout
+```
+
+right below the `---` line.
+
+---
+## 3. Add names to the tasks in `roles/test/tasks/main.yml`
+
+### Before
+```yaml
+---
+- ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_TIMEOUT="
+    line: "GRUB_TIMEOUT={{ timeout | int }}"
+    when: persistent | bool == true
+
+- ansible.builtin.lineinfile:
+    path: /boot/grub2/grub.cfg
+    regexp: "^set timeout="
+    line: "set timeout={{ timeout | int }}"
+```
+
+### After
+```yaml
+---
+- name: Sets persistent GRUB timeout  # <--- added
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_TIMEOUT="
+    line: "GRUB_TIMEOUT={{ timeout | int }}"
+    when: persistent | bool == true
+
+- name: Sets temporary GRUB timeout   # <--- added
+  ansible.builtin.lineinfile:
+    path: /boot/grub2/grub.cfg
+    regexp: "^set timeout="
+    line: "set timeout={{ timeout | int }}"
+```
+
+So each task has a `name:`.
+
+---
+## 4. Rename the `test` role to `grub` and update references
+
+1. **Rename the folder**:
    ```bash
-   cat > simple-playbook.yml << 'EOF'
-   ---
-   - name: Simple Playbook
-     hosts: localhost
-     gather_facts: false
-     tasks:
-       - name: Print a message
-         debug:
-           msg: "This is a simple playbook created in the Git lab"
-   EOF
+   git mv roles/test roles/grub
    ```
 
-2. **Check the status of your changes**
+2. **Update** `site.yml` to reference `- grub` instead of `- test`.
+
+### `site.yml` Before
+```yaml
+---
+- name: Sets the GRUB timeout
+  hosts: all
+  become: true
+  roles:
+    - test
+```
+
+### `site.yml` After
+```yaml
+---
+- name: Sets the GRUB timeout
+  hosts: all
+  become: true
+  roles:
+    - grub
+```
+
+---
+## 5. Change `timeout` and `persistent` to `grub_timeout` and `grub_persistent`
+
+### Files to change:
+1. **`roles/grub/defaults/main.yml`**
+2. **`roles/grub/tasks/main.yml`**
+3. **`group_vars/lb_servers.yml`**
+
+In each place, replace **`timeout`** with **`grub_timeout`** and **`persistent`** with **`grub_persistent`**.
+
+
+### Examples
+
+#### `roles/grub/defaults/main.yml`
+
+**Before**:
+```yaml
+---
+timeout: 0
+persistent: true
+```
+
+**After**:
+```yaml
+---
+grub_timeout: 0
+grub_persistent: true
+```
+
+---
+
+#### `roles/grub/tasks/main.yml`
+
+**Before** (with names already added):
+```yaml
+---
+- name: Sets persistent GRUB timeout
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_TIMEOUT="
+    line: "GRUB_TIMEOUT={{ timeout | int }}"
+    when: persistent | bool == true
+
+- name: Sets temporary GRUB timeout
+  ansible.builtin.lineinfile:
+    path: /boot/grub2/grub.cfg
+    regexp: "^set timeout="
+    line: "set timeout={{ timeout | int }}"
+```
+
+**After**:
+```yaml
+---
+- name: Sets persistent GRUB timeout
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_TIMEOUT="
+    line: "GRUB_TIMEOUT={{ grub_timeout | int }}"
+    when: grub_persistent | bool == true
+
+- name: Sets temporary GRUB timeout
+  ansible.builtin.lineinfile:
+    path: /boot/grub2/grub.cfg
+    regexp: "^set timeout="
+    line: "set timeout={{ grub_timeout | int }}"
+```
+
+---
+
+#### `group_vars/lb_servers.yml`
+
+**Before**:
+```yaml
+---
+timeout: 30
+persistent: true
+```
+
+**After**:
+```yaml
+---
+grub_timeout: 30
+grub_persistent: true
+```
+
+---
+## 6. Commit and Push
+
+When all changes are done:
+
+```bash
+git add .
+git commit -m "Lab changes: added names, renamed role, changed variable names"
+git push -u origin exercise
+```
+
+Now you have an `exercise` branch on GitHub with all the modifications. The lab is complete.
+
+---
+
+## 7. Verification
+
+- **Check** that your `exercise` branch on GitHub has the updated files:
+  - `roles/grub/`
+  - Variables renamed
+  - Play name added
+  - Task names added
+    
+- **OPTIONAL: Run** the playbook to ensure everything works:
+  ```bash
+  ansible-navigator run site.yml -eei ee-supported-rhel8 --pp missing -m stdout -C
+  ```
+
+---
+
+## 8. Repeat If Needed
+
+To restart:
+1. Remove the local directory:
    ```bash
-   git status
+   cd ~
+   rm -rf ~/git-repos/devops-review
    ```
-
-3. **Stage the new file**
+2. Clone again:
    ```bash
-   git add simple-playbook.yml
+   git clone https://github.com/YOUR_GITHUB_USERNAME/devops-review.git
+   cd devops-review
    ```
+3. Checkout a fresh branch (`exercise2`, for example) and do the same steps.
 
-4. **Commit the changes**
-   ```bash
-   git commit -m "Add simple playbook"
-   ```
+You can replicate the lab’s final state any number of times.
 
-5. **Modify the playbook**
-   ```bash
-   cat >> simple-playbook.yml << 'EOF'
-   
-       - name: Get date and time
-         command: date
-         register: date_output
-         
-       - name: Display date and time
-         debug:
-           var: date_output.stdout
-   EOF
-   ```
-
-6. **Stage and commit the changes**
-   ```bash
-   git add simple-playbook.yml
-   git commit -m "Add date and time tasks to playbook"
-   ```
-
-## Exercise 3: Managing Inventory Files with Git
-
-In this exercise, you'll create and manage inventory files using Git.
-
-1. **Create an inventory directory structure**
-   ```bash
-   mkdir -p inventory/group_vars/webservers
-   mkdir -p inventory/host_vars/web1
-   ```
-
-2. **Create a main inventory file**
-   ```bash
-   cat > inventory/hosts << 'EOF'
-   [webservers]
-   web1 ansible_host=192.168.1.101
-   web2 ansible_host=192.168.1.102
-   
-   [dbservers]
-   db1 ansible_host=192.168.1.201
-   db2 ansible_host=192.168.1.202
-   
-   [all:children]
-   webservers
-   dbservers
-   EOF
-   ```
-
-3. **Create group variables file**
-   ```bash
-   cat > inventory/group_vars/webservers/vars.yml << 'EOF'
-   ---
-   http_port: 80
-   https_port: 443
-   web_server: nginx
-   EOF
-   ```
-
-4. **Create host variables file**
-   ```bash
-   cat > inventory/host_vars/web1/vars.yml << 'EOF'
-   ---
-   ansible_user: rhel
-   ansible_ssh_private_key_file: /home/admin/.ssh/id_rsa
-   http_port: 8080  # Override group variable
-   EOF
-   ```
-
-5. **Stage and commit the inventory files**
-   ```bash
-   git add inventory/
-   git commit -m "Add inventory structure with group and host vars"
-   ```
-
-## Exercise 4: Using Multiple Files per Host or Group
-
-1. **Add additional variable files for the webservers group**
-   ```bash
-   cat > inventory/group_vars/webservers/nginx.yml << 'EOF'
-   ---
-   nginx_version: 1.18.0
-   nginx_worker_processes: 4
-   nginx_worker_connections: 1024
-   EOF
-   
-   cat > inventory/group_vars/webservers/ssl.yml << 'EOF'
-   ---
-   ssl_enabled: true
-   ssl_cert_path: /etc/nginx/ssl/cert.pem
-   ssl_key_path: /etc/nginx/ssl/key.pem
-   EOF
-   ```
-
-2. **Add additional variable files for the web1 host**
-   ```bash
-   cat > inventory/host_vars/web1/nginx.yml << 'EOF'
-   ---
-   nginx_worker_processes: 2  # Override group setting
-   nginx_custom_config: true
-   EOF
-   
-   cat > inventory/host_vars/web1/monitoring.yml << 'EOF'
-   ---
-   enable_monitoring: true
-   monitoring_interval: 60
-   monitoring_service: prometheus
-   EOF
-   ```
-
-3. **Stage and commit the changes**
-   ```bash
-   git add inventory/
-   git commit -m "Add multiple variable files for hosts and groups"
-   ```
-
-## Exercise 5: Configuring Remote Host Settings
-
-1. **Create a playbook that uses the inventory**
-   ```bash
-   cat > configure-webservers.yml << 'EOF'
-   ---
-   - name: Configure Web Servers
-     hosts: webservers
-     gather_facts: true
-     tasks:
-       - name: Display host configuration
-         debug:
-           msg: >
-             Host: {{ inventory_hostname }}
-             IP: {{ ansible_host }}
-             HTTP Port: {{ http_port }}
-             HTTPS Port: {{ https_port }}
-             Web Server: {{ web_server }}
-             {% if nginx_version is defined %}
-             Nginx Version: {{ nginx_version }}
-             {% endif %}
-   EOF
-   ```
-
-2. **Create an inventory file with custom connection settings**
-   ```bash
-   cat > inventory/custom_connection.ini << 'EOF'
-   [webservers]
-   web1 ansible_host=192.168.1.101 ansible_port=2222 ansible_user=custom_user
-   web2 ansible_host=192.168.1.102
-   
-   [dbservers]
-   db1 ansible_host=192.168.1.201
-   EOF
-   ```
-
-3. **Stage and commit the changes**
-   ```bash
-   git add configure-webservers.yml inventory/custom_connection.ini
-   git commit -m "Add webserver configuration playbook and custom connection settings"
-   ```
-
-## Exercise 6: Setting Up Directories with Multiple Host Variable Files
-
-1. **Create a more complex directory structure for a production environment**
-   ```bash
-   mkdir -p inventory/production/{group_vars,host_vars}
-   mkdir -p inventory/production/group_vars/{webservers,dbservers,loadbalancers}
-   mkdir -p inventory/production/host_vars/{web1,web2,db1,lb1}
-   ```
-
-2. **Create the main inventory file**
-   ```bash
-   cat > inventory/production/hosts << 'EOF'
-   [webservers]
-   web1.example.com ansible_host=192.168.10.101
-   web2.example.com ansible_host=192.168.10.102
-   
-   [dbservers]
-   db1.example.com ansible_host=192.168.10.201
-   
-   [loadbalancers]
-   lb1.example.com ansible_host=192.168.10.251
-   
-   [all:children]
-   webservers
-   dbservers
-   loadbalancers
-   EOF
-   ```
-
-3. **Create variable files for each group and host**
-   ```bash
-   # Group variables
-   for group in webservers dbservers loadbalancers; do
-     cat > inventory/production/group_vars/$group/main.yml << EOF
-   ---
-   # Main variables for $group
-   group_name: $group
-   EOF
-   
-     cat > inventory/production/group_vars/$group/users.yml << EOF
-   ---
-   # User variables for $group
-   ansible_user: rhel
-   ansible_become: true
-   EOF
-   done
-   
-   # Host variables
-   for host in web1 web2 db1 lb1; do
-     cat > inventory/production/host_vars/$host/main.yml << EOF
-   ---
-   # Main variables for $host
-   host_name: $host.example.com
-   EOF
-   
-     cat > inventory/production/host_vars/$host/network.yml << EOF
-   ---
-   # Network variables for $host
-   ansible_host: 192.168.10.$([ "$host" == "web1" ] && echo "101" || [ "$host" == "web2" ] && echo "102" || [ "$host" == "db1" ] && echo "201" || echo "251")
-   EOF
-   done
-   ```
-
-4. **Stage and commit the changes**
-   ```bash
-   git add inventory/production/
-   git commit -m "Add complex production inventory structure with multiple variable files"
-   ```
-
-## Exercise 7: Overriding Names in Inventory Files
-
-1. **Create an inventory file with name overrides**
-   ```bash
-   cat > inventory/name_override.ini << 'EOF'
-   [webservers]
-   actual_hostname1 ansible_host=192.168.1.101 ansible_ssh_host=web1.example.com
-   actual_hostname2 ansible_host=192.168.1.102 ansible_ssh_host=web2.example.com
-   
-   [dbservers]
-   actual_db1 ansible_host=192.168.1.201 ansible_ssh_host=db1.example.com
-   EOF
-   ```
-
-2. **Create a playbook that uses the inventory with name overrides**
-   ```bash
-   cat > name_override_demo.yml << 'EOF'
-   ---
-   - name: Demonstrate Name Override
-     hosts: webservers
-     gather_facts: false
-     tasks:
-       - name: Show hostname vs. inventory_hostname
-         debug:
-           msg: >
-             Inventory Hostname: {{ inventory_hostname }}
-             Ansible Host: {{ ansible_host }}
-             SSH Host: {{ ansible_ssh_host }}
-   EOF
-   ```
-
-3. **Stage and commit the changes**
-   ```bash
-   git add inventory/name_override.ini name_override_demo.yml
-   git commit -m "Add inventory with name overrides and demo playbook"
-   ```
-
-## Exercise 8: Pushing Changes to a Remote Repository
-
-In a real-world scenario, you would push your changes to a remote repository. For this lab, we'll simulate this process.
-
-1. **Create a bare repository to simulate a remote repository**
-   ```bash
-   cd ~/ansible-labs/git-lab
-   mkdir remote-repo.git
-   cd remote-repo.git
-   git init --bare
-   cd ../ansible-examples
-   ```
-
-2. **Add the remote repository**
-   ```bash
-   git remote add origin ~/ansible-labs/git-lab/remote-repo.git
-   ```
-
-3. **Push your branch to the remote repository**
-   ```bash
-   git push -u origin my-ansible-work
-   ```
-
-4. **Verify the push was successful**
-   ```bash
-   cd ~/ansible-labs/git-lab/remote-repo.git
-   git branch -a
-   ```
 
 ## Conclusion
 
