@@ -884,6 +884,7 @@ These skills are essential for the "Develop playbooks that create and use templa
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Templating Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html)
 - [Jinja2 Template Designer Documentation](https://jinja.palletsprojects.com/en/3.0.x/templates/)
 - [Ansible Filter Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html)
