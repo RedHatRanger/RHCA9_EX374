@@ -867,6 +867,7 @@ These skills are essential for the EX374 exam and for working effectively with A
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Navigator Documentation](https://ansible-navigator.readthedocs.io/)
 - [Ansible Builder Documentation](https://ansible-builder.readthedocs.io/)
 - [Ansible Execution Environments Documentation](https://docs.ansible.com/ansible/latest/getting_started_ee/index.html)
