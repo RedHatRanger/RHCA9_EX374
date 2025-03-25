@@ -823,6 +823,7 @@ These skills are essential for the "Use conditionals to control play execution" 
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Conditionals Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html)
 - [Ansible Loops Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html)
 - [Ansible Error Handling Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_error_handling.html)
