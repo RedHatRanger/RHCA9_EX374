@@ -1,6 +1,10 @@
 # Lab: Git Repository Management
 
-This lab covers the "Understand and use Git" objective of the EX374 exam. You'll learn how to clone repositories, create and push files, and manage inventory files using Git.
+This lab covers the "Understand and use Git" objectives of the EX374 exam:
+- Clone a Git repository
+- Create, modify and push files in a Git repository
+
+You'll learn how to clone repositories, create and push files, and manage inventory files using Git.
 
 ## Prerequisites
 
