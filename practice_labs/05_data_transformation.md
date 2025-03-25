@@ -974,6 +974,7 @@ These skills are essential for the "Transform data with filters and plugins" obj
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Filter Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html)
 - [Ansible Lookup Plugins Documentation](https://docs.ansible.com/ansible/latest/plugins/lookup.html)
 - [Jinja2 Template Designer Documentation](https://jinja.palletsprojects.com/en/3.0.x/templates/)
