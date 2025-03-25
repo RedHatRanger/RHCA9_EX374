@@ -1,4 +1,4 @@
-# Lab: Git Repository Management
+# Lab: Understand and Use Git
 
 This lab covers the "Understand and use Git" objectives of the EX374 exam:
 - Clone a Git repository
