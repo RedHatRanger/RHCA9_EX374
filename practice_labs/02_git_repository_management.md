@@ -4,7 +4,6 @@ This lab covers the "Understand and use Git" objective of the EX374 exam. You'll
 
 ## Prerequisites
 
-- Ansible Automation Platform 2.4 installed according to the [AAP Installation Guide](../guides/aap_installation_guide.md)
 - Basic understanding of Git concepts
 - Git installed on your system
 
@@ -28,7 +27,7 @@ This lab covers the "Understand and use Git" objective of the EX374 exam. You'll
    cd ~/git-repos
    ```
 
-## Exercise 1: Cloning a Git Repository
+## Cloning a Git Repository
 
 In this exercise, you'll clone a sample Ansible repository.
 
