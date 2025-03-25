@@ -1051,6 +1051,7 @@ These skills are essential for the "Create and use execution environments" objec
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Builder Documentation](https://ansible-builder.readthedocs.io/en/latest/)
 - [Ansible Navigator Documentation](https://ansible-navigator.readthedocs.io/en/latest/)
 - [Execution Environments in Automation Controller Documentation](https://docs.ansible.com/automation-controller/latest/html/userguide/execution_environments.html)
