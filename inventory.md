@@ -3,13 +3,13 @@
 # COPY TO YOUR HOST AND RENAME IT 'inventory'.  Then, use it with the AAP Setup Bundle's install.sh script.  
 
 [automationcontroller]
-controller.lab.example.com node_type=hybrid
+localhost node_type=hybrid ansible_connection=local
 
 [automationcontroller:vars]
 peers=execution_nodes
 
 [execution_nodes]
-controller.lab.example.com
+localhost
 
 [automationhub]
 
@@ -20,6 +20,7 @@ controller.lab.example.com
 [sso]
 
 [all:vars]
+ansible_user=rhel
 admin_password='redhat'
 
 pg_host='controller.lab.example.com'
