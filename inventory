@@ -1,4 +1,5 @@
 # Instructions for setup by Luca Berton: https://www.youtube.com/watch?v=NlG8RGY3P8s
+# Use with the AAP Setup Bundle's install.sh script.
 
 [automationcontroller]
 controller.lab.example.com node_type=hybrid
