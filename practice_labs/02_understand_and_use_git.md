@@ -265,6 +265,9 @@ Now you have an `exercise` branch on GitHub with all the modifications. The lab 
 ## 7. Verification
 
 - **Check** that your `exercise` branch on GitHub has the updated files:
+  ```
+  git status
+  ```
   - `roles/grub/`
   - Variables renamed
   - Play name added
