@@ -1185,6 +1185,7 @@ These skills are essential for the "Create and manage Ansible content collection
 
 ## Additional Resources
 
+- [EX374 Objectives](https://github.com/RedHatRanger/RHCA9_EX374/blob/main/objectives.md)
 - [Ansible Collections Documentation](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html)
 - [Developing Ansible Collections](https://docs.ansible.com/ansible/latest/dev_guide/developing_collections.html)
 - [Ansible Galaxy Documentation](https://galaxy.ansible.com/docs/)
