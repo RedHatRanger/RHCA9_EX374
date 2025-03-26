@@ -1,39 +1,48 @@
-# Lab: Working with Ansible Configuration Settings
+# Lab: Working with Ansible Configuration Settings (Git-Clone Edition)
 
 ## Overview
 In this lab, you will:
-1. Configure **ansible-navigator** to use a specific container image, set a pull policy, and disable artifact creation.
-2. Update **ansible.cfg** to specify `forks=15`.
-3. Run a simple playbook (`install-web.yml`) to validate your changes.
+1. **Clone** a Git repository that includes all Ansible configuration files and a sample playbook.
+2. Configure **ansible-navigator** to use a specific container image, set a pull policy, and disable artifact creation (via `ansible-navigator.yml`).
+3. Update **ansible.cfg** to specify `forks=15`.
+4. **Run** the `install-web.yml` playbook to verify everything is configured correctly.
 
 ### Final Outcome
-When you run the lab’s playbook against `servera.lab.example.com`, Apache (HTTPD) is installed successfully, and you confirm your Ansible configuration is correct.
+When you run the lab’s playbook against `node1.lab.example.com`, Apache (HTTPD) is installed successfully, confirming your Ansible configuration is correct.
 
 ---
 
-## 1. Prepare Your Project Folder
+## 1. Clone the Lab Repository
+1. Choose a local directory for your labs, for example:
+   ```bash
+   mkdir -p ~/config-review
+   cd ~/config-review
+   ```
+2. **Clone** the repository (adjust the URL if necessary):
+   ```bash
+   git clone https://github.com/RedHatRanger/config-review.git
+   cd config-review
+   ```
+3. Your local structure should look like:
+   ```
+   config-review/
+   ├── ansible-navigator.yml
+   ├── ansible.cfg
+   ├── inventory
+   └── install-web.yml
+   ```
 
-Suppose you have a folder named `~/config-review`:
-
-```
-config-review/
-├── ansible-navigator.yml
-├── ansible.cfg
-├── inventory
-└── install-web.yml
-```
-
-- `ansible-navigator.yml`: Navigator-level settings.
-- `ansible.cfg`: Traditional Ansible config.
-- `inventory`: Has `servera.lab.example.com` with `ansible_user=student`, `ansible_become=true`, etc.
-- `install-web.yml`: A minimal playbook installing an HTTP server.
+**Note**: The repository includes:
+- `ansible-navigator.yml`: Configures Navigator’s EE image, pull policy, and artifact settings.
+- `ansible.cfg`: Adjusts default Ansible settings like `forks`.
+- `inventory`: Points to `servera.lab.example.com` with an appropriate user/credentials.
+- `install-web.yml`: A simple playbook installing Apache.
 
 ---
 
-## 2. Configure `ansible-navigator.yml`
+## 2. Review `ansible-navigator.yml`
 
-1. **Edit** `~/config-review/ansible-navigator.yml`.
-2. Ensure it includes:
+Open **`ansible-navigator.yml`**:
 
 ```yaml
 ---
@@ -50,15 +59,22 @@ ansible-navigator:
 ```
 
 ### Explanation
-- **`image: hub.lab.example.com/ee-supported-rhel8:latest`**: The default container image.
-- **`policy: missing`**: Only pull the image if it’s not present locally.
-- **`playbook-artifact: enable: False`**: Disables artifact creation, which can otherwise conflict with `--ask-become-pass`.
+- **`image`:** The default container image for execution environments.
+- **`policy: missing`:** Only pull if the image is missing locally.
+- **`playbook-artifact.enable: False`:** Disables artifact creation (helps with `--ask-become-pass`).
+
+If you need a different image or settings, edit them here. Commit and push your changes if you have permissions:
+```bash
+git add ansible-navigator.yml
+git commit -m "Update EE image"
+git push
+```
 
 ---
 
-## 3. Configure `ansible.cfg`
+## 3. Review `ansible.cfg`
 
-1. In `~/config-review/ansible.cfg`, add:
+Open **`ansible.cfg`**:
 
 ```ini
 [defaults]
@@ -72,59 +88,74 @@ become_method = sudo
 ```
 
 ### Explanation
-- `forks = 15` increases parallelism.
-- `inventory = inventory` points to your local file.
-- The `[privilege_escalation]` block ensures we can prompt for a become password.
+- **`forks = 15`:** Increase parallel tasks.
+- **`inventory = inventory`:** Use the local `inventory` file by default.
+- `[privilege_escalation]`: Ensures prompts for `--ask-become-pass` if needed.
+
+Again, commit any changes if needed.
 
 ---
 
-## 4. Check Your Configuration
+## 4. Validate Configuration
 
-Run:
+From the **config-review** directory, run:
 
 ```bash
 ansible-navigator config
 ```
 
-- In the TUI, type `:f forks`.
-- You should see `forks: 15` from `/home/student/config-review/ansible.cfg`.
-- Press Esc twice to exit.
+1. In the TUI, type `:f forks` and press Enter.
+2. Confirm `forks = 15` from your `ansible.cfg`.
+3. Press Esc twice to exit.
+
+**Result**: You verified the local config is recognized by `ansible-navigator`.
 
 ---
 
 ## 5. Run the `install-web.yml` Playbook
 
-1. **Command**:
+1. Execute:
    ```bash
    ansible-navigator run install-web.yml --ask-become-pass -m stdout
    ```
-2. **Enter** the become password (`student`) if prompted.
-3. The play runs in the specified EE, and you should see:
+   - **`--ask-become-pass`**: Prompts for the sudo password.
+   - **`-m stdout`**: Outputs logs to your terminal.
+2. Enter your become password (for example, `student`) if prompted.
+3. The playbook installs Apache on **`servera.lab.example.com`**:
    ```
    PLAY RECAP
    servera.lab.example.com : ok=2 changed=1 unreachable=0 failed=0
    ```
-4. Apache (HTTPD) should be installed on `servera.lab.example.com`.
+
+**Result**: The lab confirms your EE and config settings function as intended.
 
 ---
 
 ## 6. Repeatability
 
-To **redo** the lab:
-1. Remove or rename `ansible-navigator.yml` and `ansible.cfg`.
-2. Recreate them with the same content.
-3. Rerun `ansible-navigator run install-web.yml --ask-become-pass`.
+Whenever you want a fresh lab:
+1. **Remove** or rename the `config-review` folder:
+   ```bash
+   rm -rf ~/git-labs/config-review
+   ```
+2. **Re-clone**:
+   ```bash
+   git clone https://github.com/RedHatRanger/config-review.git
+   cd config-review
+   ```
+3. Re-run `ansible-navigator run install-web.yml --ask-become-pass`.
 
-You can verify your config each time via `ansible-navigator config`.
+**That’s it!** You can re-do the same lab steps.
 
 ---
 
 ## Which EX374 Objectives?
-1. **Manage execution environments** (partial): Specifying the container image and pull policy.
-2. **Manage Ansible configuration**: Adjusting `ansible.cfg` (`forks`) and disabling playbook artifacts.
-3. **Manage task execution**: Using `--ask-become-pass`, ensuring the playbook runs with elevated privileges.
 
-No advanced roles or collections here, but this lab **demonstrates** essential Ansible config usage, setting up an EE in `ansible-navigator`, and verifying changes.
+1. **Manage Ansible configuration**: Setting `forks`, referencing the local inventory, controlling artifact creation.
+2. **Manage execution environments** (Partial): Specifying the container image and pull policy in `ansible-navigator.yml`.
+3. **Manage task execution**: Using `--ask-become-pass`, verifying the playbook runs with privilege escalation.
+
+No advanced roles or collections usage here, but you demonstrate essential config usage and verifying it by running a simple playbook.
+
 
 **Lab Complete!**
-
