@@ -35,7 +35,7 @@ When you run the lab’s playbook against `node1.lab.example.com`, Apache (HTTPD
 **Note**: The repository includes:
 - `ansible-navigator.yml`: Configures Navigator’s EE image, pull policy, and artifact settings.
 - `ansible.cfg`: Adjusts default Ansible settings like `forks`.
-- `inventory`: Points to `servera.lab.example.com` with an appropriate user/credentials.
+- `inventory`: Points to `node1.lab.example.com` with an appropriate user/credentials.
 - `install-web.yml`: A simple playbook installing Apache.
 
 ---
@@ -120,11 +120,11 @@ ansible-navigator config
    ```
    - **`--ask-become-pass`**: Prompts for the sudo password.
    - **`-m stdout`**: Outputs logs to your terminal.
-2. Enter your become password (for example, `student`) if prompted.
-3. The playbook installs Apache on **`servera.lab.example.com`**:
+2. Enter your become password (for example, `redhat`) if prompted.
+3. The playbook installs Apache on **`node1.lab.example.com`**:
    ```
    PLAY RECAP
-   servera.lab.example.com : ok=2 changed=1 unreachable=0 failed=0
+   node1.lab.example.com : ok=2 changed=1 unreachable=0 failed=0
    ```
 
 **Result**: The lab confirms your EE and config settings function as intended.
