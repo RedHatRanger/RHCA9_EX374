@@ -1,4 +1,4 @@
-# Lab: Running Playbooks with Automation Controller
+# Lab: Manage Inventories and Credentials
 
 ## Overview
 
