@@ -122,10 +122,6 @@ ansible-navigator config
 
 ---
 
-**That’s it!** You can re-do the same lab steps.
-
----
-
 ## Which EX374 Objectives?
 
 1. **Manage Ansible configuration**: Setting `forks`, referencing the local inventory, controlling artifact creation.
@@ -136,3 +132,16 @@ No advanced roles or collections usage here, but you demonstrate essential confi
 
 
 **Lab Complete!**
+
+
+<br><br><br><br>
+## Ansible Navigator Configuration Summary
+- `ansible-navigator config` shows you the current config used by ansible-navigator run.
+- Only config files visible inside the execution environment (like /etc/ansible/ansible.cfg or one in your project directory) are used.
+- You can configure Navigator with:
+> ANSIBLE_NAVIGATOR_CONFIG environment variable
+> ansible-navigator.yml in your current directory
+> ~/.ansible-navigator.yml in your home directory
+
+- Use `ansible-navigator settings --sample` to generate a sample config file.
+- Use `ansible-navigator settings --effective` to display your final config (merged from CLI, env vars, and config files).
