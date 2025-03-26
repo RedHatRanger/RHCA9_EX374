@@ -101,8 +101,7 @@ Type `:q` to quit.
 1. Execute:
 
    ```bash
-   ansible-navigator run cockpit.yml \
-     --eei ee-supported-rhel8 --pp missing -m stdout
+   ansible-navigator run cockpit.yml --eei ee-supported-rhel8
    ```
    
    **Explanation**:
@@ -192,6 +191,9 @@ server_list = community_repo
 url=https://hub.lab.example.com/api/galaxy/content/community/
 token=YOUR_TOKEN
 ```
+
+> From the private automation hub web UI, navigate to Collections > API token
+> management and then click Load token. Click the Copy to clipboard icon.
 
 ### 7.4 Install the Collection Locally
 
