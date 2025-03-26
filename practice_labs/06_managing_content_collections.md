@@ -1,4 +1,4 @@
-# Lab: Content Collection Management
+# Lab: Managing Content Collections
 
 This lab covers the "Create and manage Ansible content collections" objective of the EX374 exam. You'll learn how to create, install, and use Ansible content collections.
 
@@ -8,6 +8,297 @@ This lab covers the "Create and manage Ansible content collections" objective of
 - Completion of the previous labs
 
 ## Lab Environment Setup
+
+# Lab: Managing Content Collections and Execution Environments
+
+**Objective**: Reproduce a scenario in which two different playbooks require different Ansible Collections, and we demonstrate:
+1. Running one playbook with an existing execution environment.
+2. Installing a missing collection to run a second playbook.
+
+We’ll assume:
+- You have **Automation Controller** set up.
+- You have **PostgreSQL** for the controller’s database.
+- You have a **private automation hub** at `https://hub.lab.example.com`.
+- All hosts (workstation, `servera`, `serverb`) have a username/password of **rhel/redhat**.
+
+
+---
+
+## 1. Overview
+
+This lab contains **two** Ansible playbooks:
+1. **`cockpit.yml`** – Installs and configures Cockpit, using the `ansible.posix.firewalld` module.
+2. **`create_samples_db.yml`** – Creates a MariaDB database, using the `community.mysql` collection.
+
+We’ll show how:
+
+- The **`cockpit.yml`** playbook can be run with the `ee-supported-rhel8` environment (assuming it has the `ansible.posix` collection).
+- The **`create_samples_db.yml`** playbook requires the `community.mysql` collection, which we might have to install manually (or use a custom EE that includes it).
+
+Both hosts (`servera`, `serverb`) have the username **`rhel`** and password **`redhat`**.
+
+---
+
+## 2. Prepare the GitHub Repository
+
+1. **Create** or **use** a GitHub (or internal Git) repository named, for example, `manage-review`.
+2. **Add** the following files:
+
+### 2.1 `cockpit.yml`
+
+```yaml
+---
+- name: Deploy cockpit
+  hosts: servera
+  become: true
+  tasks:
+    - name: Ensure cockpit is installed
+      ansible.builtin.yum:
+        name: cockpit
+        state: present
+
+    - name: Ensure the cockpit service is started and enabled
+      ansible.builtin.systemd:
+        name: cockpit
+        state: started
+        enabled: true
+
+    - name: Ensure Cockpit network traffic is allowed
+      ansible.posix.firewalld:
+        service: cockpit
+        permanent: true
+        state: enabled
+        immediate: true
+```
+
+### 2.2 `create_samples_db.yml`
+
+```yaml
+---
+- name: Create samples database
+  hosts: serverb
+  become: true
+  tasks:
+    - name: Ensure MariaDB is installed
+      ansible.builtin.yum:
+        name:
+          - mariadb
+          - mariadb-server
+        state: present
+
+    - name: Ensure the mariadb service is started and enabled
+      ansible.builtin.systemd:
+        name: mariadb
+        state: started
+        enabled: true
+
+    - name: Ensure the samples database exists
+      community.mysql.mysql_db:
+        name: samples
+        state: present
+```
+
+### 2.3 `inventory`
+
+```ini
+[servera]
+servera.lab.example.com ansible_user=rhel ansible_password=redhat
+
+[serverb]
+serverb.lab.example.com ansible_user=rhel ansible_password=redhat
+```
+
+(Adjust hostnames if needed.)
+
+### 2.4 `ansible.cfg`
+
+```ini
+[defaults]
+inventory = ./inventory
+remote_user = rhel
+
+[galaxy]
+# If you plan to install from the private automation hub, you can define it here.
+server_list = community_repo
+
+[galaxy_server.community_repo]
+url=https://hub.lab.example.com/api/galaxy/content/community/
+token=<PLACE-YOUR-TOKEN-HERE>
+```
+
+> We’ll assume you have a token from your private automation hub. If not, you can remove the `galaxy_server` lines.
+
+### 2.5 `requirements.yml`
+
+```yaml
+---
+collections:
+  - name: community.mysql
+  - name: ansible.posix
+```
+
+*(Optional) If you want to locally install the needed collections.*
+
+---
+
+## 3. Push to GitHub
+
+```bash
+cd ~/git-repos/manage-review
+
+git add .
+git commit -m "Add cockpit.yml, create_samples_db.yml, inventory, ansible.cfg"
+git push -u origin main
+```
+
+---
+
+## 4. Set Up the Lab Environment
+
+### 4.1 Automation Controller Setup
+
+1. Log in to **Automation Controller** with admin privileges.
+2. Create (or use) an **Organization** (e.g., "Default").
+3. Create a **Project** pointing to your `manage-review` repo.
+4. Create an **Inventory** with two hosts:
+   - **servera.lab.example.com**
+   - **serverb.lab.example.com**
+   
+   Or you can import them from a dynamic source if you prefer. Ensure the inventory has the correct credentials (rhel/redhat) or a Machine Credential that uses that username/password.
+
+### 4.2 Private Automation Hub
+
+You mentioned you have a private automation hub. Make sure:
+1. The hub is accessible at `https://hub.lab.example.com`.
+2. You have a **token** or credentials to authenticate.
+3. If you want to install `community.mysql` from that hub, you can do so either on the controller (if the environment allows) or inside a custom EE.
+
+---
+
+## 5. Running the Cockpit Playbook
+
+1. In **Automation Controller**, go to **Templates** and create a new **Job Template**:
+   - **Name**: Deploy Cockpit
+   - **Inventory**: the inventory that has `servera`
+   - **Project**: manage-review
+   - **Playbook**: `cockpit.yml`
+   - **Credentials**: a machine credential with `rhel/redhat` (unless you specified it in your inventory).
+   - **Execution Environment**: pick your existing "supported" EE if it has `ansible.posix`.
+2. **Save**.
+3. **Launch**.
+   - If the EE has `ansible.posix`, the job succeeds and opens firewall ports for Cockpit.
+
+You can confirm by browsing to `https://servera.lab.example.com:9090` (using username `rhel`, password `redhat`).
+
+---
+
+## 6. Running the Create Samples DB Playbook
+
+### 6.1 Attempt with the same EE
+1. Create a new **Job Template**:
+   - **Name**: Create Samples DB
+   - **Inventory**: the same or new inventory with `serverb`
+   - **Project**: manage-review
+   - **Playbook**: `create_samples_db.yml`
+   - **Execution Environment**: the same "supported" EE
+2. **Launch**.
+   - If the "supported" EE does **not** have `community.mysql`, you’ll likely see a failure.
+
+### 6.2 Add the Missing Collection
+
+There are multiple ways:
+
+**Method A**: *Install the missing collection at runtime.*
+1. In your job template, under **Advanced → Ansible Environment Variables**, specify a `requirements.yml` or configure your controller to automatically install missing collections. (This can be tricky, depending on your Controller version/policy.)
+2. Or SSH to the controller and run `ansible-galaxy collection install community.mysql` in a local path recognized by the EE, which is not typically recommended. We usually prefer building an image.
+
+**Method B**: *Build a custom Execution Environment (EE) that includes `community.mysql`.*
+1. Provide a `requirements.yml` in your container build.
+2. Push that image to your private registry/automation hub.
+3. In Automation Controller, create an **Execution Environment** entry pointing to that custom image.
+4. Re-run the job template using the new custom EE.
+
+Either method demonstrates the concept: one playbook required a collection not in the environment, so you add it.
+
+---
+
+## 7. (Optional) Local CLI Testing with `ansible-navigator`
+
+If you have direct CLI access on the automation controller or another control machine:
+
+1. **Install** or **build** a container with these collections, or rely on the `requirements.yml`.
+2. Run:
+   ```bash
+   ansible-navigator run cockpit.yml --eei ee-supported-rhel8 -m stdout
+   ansible-navigator run create_samples_db.yml --eei custom-ee-with-mysql -m stdout
+   ```
+
+This replicates the environment where the first playbook runs with the stock EE, and the second needs a different EE.
+
+---
+
+## 8. Verifying the Database
+
+Once the second playbook (`create_samples_db.yml`) completes:
+1. SSH to `serverb.lab.example.com` using `rhel/redhat`.
+2. Run:
+   ```bash
+   sudo mysql -e "SHOW DATABASES"
+   ```
+   You should see:
+   ```
+   +--------------------+
+   | Database           |
+   +--------------------+
+   | information_schema |
+   | mysql             |
+   | performance_schema|
+   | samples           |
+   +--------------------+
+   ```
+3. `samples` means the playbook worked.
+
+---
+
+## 9. Conclusion
+
+You have:
+1. Two hosts, `servera` and `serverb`, each with the username **`rhel`** and password **`redhat`**.
+2. A GitHub repo (`manage-review`) containing two playbooks plus an inventory.
+3. A private automation hub at `https://hub.lab.example.com`.
+4. An Automation Controller environment that can run these two playbooks using either an EE that already has `ansible.posix` and `community.mysql` or using separate EEs for each.
+
+This demonstrates the same **core concepts**:
+- Running a playbook that only needs an already-included collection (`ansible.posix`).
+- Running a different playbook that requires an additional collection (`community.mysql`), which you might add via a custom EE or by installing from your private automation hub.
+
+**Lab Completed!**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 1. **Create a working directory**
    ```bash
