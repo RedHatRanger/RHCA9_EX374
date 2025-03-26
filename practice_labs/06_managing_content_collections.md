@@ -275,3 +275,15 @@ In this lab, you:
 - Confirmed that the first playbook uses **`ansible.posix`** (available in the `ee-supported-rhel8` environment).
 - Found that the second playbook needs **`community.mysql`** (not present by default), so you installed or added it from a **private automation hub**.
 - Verified successful deployment of Cockpit on node1 and a `samples` DB on node2.
+
+<br><br><br><br>
+## Key Tips for Working with Collections and Execution Environments
+- Use `ansible-navigator doc <module> --mode stdout` to view module documentation from available collections.
+- Run `ansible-navigator images` to inspect available execution environments and their included collections.
+- Always use `Fully Qualified Collection Names (FQCNs)` when referencing the `<namespace>.<module>`, roles, and plugins.
+- Install collections locally with `ansible-galaxy collection install`, using -p <path> to specify the install location (unless your ansible.cfg sets `collections_path`)
+- List required collections in a `collections/requirements.yml` file for your project.
+- Execution environments can use collections stored in the project's local `collections/` directory.
+- `ee-supported-rhel8` is the default EE and includes `Red Hat Certified` and `ansible.builtin` collections.
+- `ee-minimal-rhel8` includes only `ansible.builtin`, but supports using local collections.
+- Use `ee-29-rhel8` if your playbooks require Ansible 2.9 compatibility.
