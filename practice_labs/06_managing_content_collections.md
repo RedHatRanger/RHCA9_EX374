@@ -275,6 +275,3 @@ In this lab, you:
 - Confirmed that the first playbook uses **`ansible.posix`** (available in the `ee-supported-rhel8` environment).
 - Found that the second playbook needs **`community.mysql`** (not present by default), so you installed or added it from a **private automation hub**.
 - Verified successful deployment of Cockpit on node1 and a `samples` DB on node2.
-
-You have replicated the main **“managing content collections and execution environments”** lesson from the DO374 course, with updated hostnames (`node1`, `node2`) and domain (`lab.example.com`) plus a private automation hub environment.
-
