@@ -63,13 +63,6 @@ ansible-navigator:
 - **`policy: missing`:** Only pull if the image is missing locally.
 - **`playbook-artifact.enable: False`:** Disables artifact creation (helps with `--ask-become-pass`).
 
-If you need a different image or settings, edit them here. Commit and push your changes if you have permissions:
-```bash
-git add ansible-navigator.yml
-git commit -m "Update EE image"
-git push
-```
-
 ---
 
 ## 3. Review `ansible.cfg`
@@ -91,8 +84,6 @@ become_method = sudo
 - **`forks = 15`:** Increase parallel tasks.
 - **`inventory = inventory`:** Use the local `inventory` file by default.
 - `[privilege_escalation]`: Ensures prompts for `--ask-become-pass` if needed.
-
-Again, commit any changes if needed.
 
 ---
 
@@ -127,23 +118,9 @@ ansible-navigator config
    node1.lab.example.com : ok=2 changed=1 unreachable=0 failed=0
    ```
 
-**Result**: The lab confirms your EE and config settings function as intended.
+**Result**: The lab confirms your EE and config settings function as intended (No --eei --pp parameters needed!).
 
 ---
-
-## 6. Repeatability
-
-Whenever you want a fresh lab:
-1. **Remove** or rename the `config-review` folder:
-   ```bash
-   rm -rf ~/git-labs/config-review
-   ```
-2. **Re-clone**:
-   ```bash
-   git clone https://github.com/RedHatRanger/config-review.git
-   cd config-review
-   ```
-3. Re-run `ansible-navigator run install-web.yml --ask-become-pass`.
 
 **That’s it!** You can re-do the same lab steps.
 
