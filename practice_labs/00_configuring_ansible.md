@@ -146,7 +146,7 @@ No advanced roles or collections usage here, but you demonstrate essential confi
 - Use `ansible-navigator settings --sample` to generate a sample config file.
 - Use `ansible-navigator settings --effective` to display your final config (merged from CLI, env vars, and config files).
 
-**Important**
+***Important***
 If you redirect the output of the ansible-navigator settings command into a file named ansible-navigator.yml in the current directory, then the `ansible-navigator`
 command attempts to use the configuration file and ultimately fails. Instead, redirect the command output to a file in a different directory, such as to the 
 `/tmp/ansible-navigator.yml` file, or to a file with a different name in the current directory, such as sample.yml. After the command completes, you can 
