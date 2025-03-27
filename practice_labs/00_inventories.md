@@ -52,3 +52,15 @@ backend_server_pool:
   hosts:
     appsrv-[a:e].example.com:
 ```
+
+```
+Note
+It is often a best practice to avoid storing variables in static inventory files.
+Experienced Ansible developers prefer to use static inventory files only to list the
+hosts that Ansible manages, and to organize them in groups. The variables and their
+values are stored in the host_vars or group_vars files for the inventory.
+However, you might want to define variables such as ansible_port or
+ansible_connection in the same file as the inventory itself, to keep this
+information in one place. If you set variables in too many places, then it is harder to
+remember where a particular variable is defined.
+```
