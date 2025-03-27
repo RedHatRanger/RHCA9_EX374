@@ -140,3 +140,47 @@ all:
     vars:
       http_port: 8080
 ```
+
+* YAML LAB:
+```
+# Convert this to YAML:
+[active_web_servers]
+server[b:c].lab.example.com
+
+[inactive_web_servers]
+server[d:f].lab.example.com
+
+[web_servers:children]
+active_web_servers
+inactive_web_servers
+
+[all_servers]
+servera.lab.example.com
+
+[all_servers:children]
+web_servers
+
+# Converted YAML format:
+active_web_servers:
+  hosts:
+    server[b:c].lab.example.com:
+
+inactive_web_servers:
+  hosts:
+    server[d:f].lab.example.com:
+
+web_servers:
+  children:
+    active_web_servers:
+    inactive_web_servers:
+
+all_servers:
+  hosts:
+    servera.lab.example.com:
+  children:
+    web_servers:
+
+# Test the converted YAML inventory
+ansible-navigator run -i inventory.yml --mode stdout test-ping-all-servers.yml
+```
+
