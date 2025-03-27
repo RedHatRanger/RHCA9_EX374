@@ -97,3 +97,25 @@ localhost:
 ansible_connection: local
 maria2.example.com:
 ```
+
+* To convert a static INI inventory to a YAML:
+```
+# Sample INI `origin_inventory`:
+[lb_servers]
+proxy.example.com
+[web_servers]
+web1.example.com
+web2.example.com
+[web_servers:vars]
+http_port=8080
+[backend_server_pool]
+appsrv-[a:e].example.com
+190 DO374-RHAAP2.2-en-1-20230131
+Chapter 5 | Managing Inventories
+[dc1]
+web1.example.com
+appsrv-e.example.com
+
+# Now, convert it to YAML:
+ansible-navigator inventory --mode stdout -i origin_inventory --list --yaml
+```
