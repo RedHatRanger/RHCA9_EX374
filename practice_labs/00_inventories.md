@@ -118,4 +118,25 @@ appsrv-e.example.com
 
 # Now, convert it to YAML:
 ansible-navigator inventory --mode stdout -i origin_inventory --list --yaml
+
+# Output:
+all:
+  children:
+    backend_server_pool:
+      hosts:
+        appsrv-[a:e].example.com: {}
+    dc1:
+      hosts:
+        appsrv-e.example.com: {}
+        web1.example.com: {}
+    lb_servers:
+      hosts:
+        proxy.example.com: {}
+  ungrouped: {}
+  web_servers:
+    hosts:
+      web1.example.com: {}
+      web2.example.com: {}
+    vars:
+      http_port: 8080
 ```
