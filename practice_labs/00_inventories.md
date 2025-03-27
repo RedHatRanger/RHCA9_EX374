@@ -64,3 +64,19 @@ ansible_connection in the same file as the inventory itself, to keep this
 information in one place. If you set variables in too many places, then it is harder to
 remember where a particular variable is defined.
 ```
+
+```
+In a group block, use the vars keyword to set group variables directly in a YAML inventory file.
+The following static inventory file in INI format sets the smtp_relay variable for all the hosts in
+monitoring group.
+[monitoring]
+watcher.example.com
+[monitoring:vars]
+smtp_relay=smtp.example.com
+The equivalent static inventory file in YAML format is as follows:
+monitoring:
+hosts:
+watcher.example.com:
+vars:
+smtp_relay: smtp.example.com
+```
