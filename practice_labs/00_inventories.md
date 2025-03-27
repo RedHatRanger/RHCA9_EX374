@@ -80,3 +80,20 @@ watcher.example.com:
 vars:
 smtp_relay: smtp.example.com
 ```
+
+```
+In YAML, to set a variable for a specific host instead of a group, indent the variable under that host.
+The following static inventory file in INI format sets the ansible_connection variable for the
+localhost host.
+[databases]
+maria1.example.com
+localhost ansible_connection=local
+maria2.example.com
+The equivalent static inventory file in YAML format is as follows:
+databases:
+hosts:
+maria1.example.com:
+localhost:
+ansible_connection: local
+maria2.example.com:
+```
