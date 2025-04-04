@@ -5,7 +5,7 @@ This guide provides step-by-step instructions for installing Ansible Automation 
 ## Prerequisites
 
 - A Proxmox VM set up according to the [Proxmox VM Setup Guide](proxmox_setup_guide.md)
-- Red Hat Enterprise Linux 8.8+ or 9.0+ installed and configured
+- Red Hat Enterprise Linux 9.5 installed and configured
 - System registered with Red Hat Subscription Manager
 - Required repositories enabled
 - Internet access for downloading packages
