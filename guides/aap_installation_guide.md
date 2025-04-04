@@ -22,6 +22,7 @@ This guide provides step-by-step instructions for installing Ansible Automation 
 3. **Transfer the Bundle to Your VM**
    - Use SCP or another file transfer method to copy the bundle to your VM
    ```bash
+   cd Downloads
    scp ansible-automation-platform-setup-bundle-2.4-*.tar.gz rhel@aap.example.com:/home/rhel/
    ```
 
