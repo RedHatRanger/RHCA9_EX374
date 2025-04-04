@@ -30,7 +30,7 @@ This guide provides step-by-step instructions for installing Ansible Automation 
 
 1. **Log in to Your VM**
    ```bash
-   ssh rhel@aap.example.com
+   ssh rhel@controller.lab.example.com
    ```
 
 2. **Extract the Bundle**
@@ -51,7 +51,6 @@ Create a custom inventory file for a single-node installation with Automation Co
 
 1. **Edit the Inventory File**
 ```bash
-cp inventory inventory.bak
 vim inventory
 ```
 
