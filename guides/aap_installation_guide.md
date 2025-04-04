@@ -9,6 +9,7 @@ This guide provides step-by-step instructions for installing Ansible Automation 
 - System registered with Red Hat Subscription Manager
 - Required repositories enabled
 - Internet access for downloading packages
+- Podman installed
 
 ## Download the AAP Setup Bundle
 
@@ -159,6 +160,7 @@ receptor_listener_port=27199
 
 3. **Run the `setup.sh` Installer**
    ```bash
+   podman login registry.redhat.io
    ./setup.sh -i inventory
    ```
    - The installation will take 15-30 minutes to complete
