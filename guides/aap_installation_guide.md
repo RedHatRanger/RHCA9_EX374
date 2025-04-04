@@ -156,12 +156,10 @@ registry_password='<YOUR_REDHAT_PASSWORD_OR_TOKEN>'
 receptor_listener_port=27199
 ```
 
-2. **Monitor the Installation**
+3. **Run the `setup.sh` Installer**
    ```bash
-   chmod +x setup.sh
    ./setup.sh -i inventory
    ```
-   
    - The installation will take 15-30 minutes to complete
    - You'll see detailed output of the installation process
    - If any errors occur, the installer will provide information about the issue
