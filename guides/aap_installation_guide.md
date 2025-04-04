@@ -69,7 +69,7 @@ vim inventory
 [automationcontroller]
 # This is the primary node where you run the ./setup.sh script.
 # It acts as the Controller and also a Hybrid node (can run jobs itself).
-localhost ansible_connection=local node_type=hybrid
+controller.lab.example.com node_type=hybrid
 
 [automationcontroller:vars]
 # Tells the controller which group contains the execution nodes it should manage.
