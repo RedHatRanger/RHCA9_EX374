@@ -202,6 +202,16 @@ receptor_listener_port=27199
    - Configure authentication settings
 
 ## Troubleshooting
+### Installation fails due to `noexec` option on `/tmp`:
+```
+vim /etc/fstab
+
+# Remove the noexec from /tmp
+:wq
+systemctl daemon-reload
+sudo mount -o remount,exec /tmp
+./setup.sh -i inventory
+```
 
 ### Installation Fails with Database Connection Errors
 - Verify PostgreSQL is running: `sudo systemctl status postgresql`
