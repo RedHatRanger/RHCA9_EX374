@@ -169,7 +169,6 @@ receptor_listener_port=27199
 
 4. **Verify the Installation Completed Successfully**
    ![image](https://github.com/user-attachments/assets/ccc0c70f-5e33-4b01-9e30-2351f9a65f3c)
-
    - Look for a message indicating the installation was successful
    - Note the URLs provided for accessing Automation Controller and Automation Hub
 
@@ -185,6 +184,9 @@ receptor_listener_port=27199
 3. **Log in to Automation Controller**
    - Username: `admin`
    - Password: `redhat` (as specified in the inventory file)
+   - Click `Username/Password` and enter your `Developer` Username and password.
+![image](https://github.com/user-attachments/assets/93a21b9e-6e24-4d0d-9ec4-585b6b8f262d)
+   - Click `Next`.
 
 4. **Complete Initial Setup**
    - Accept the license agreement
