@@ -168,6 +168,8 @@ receptor_listener_port=27199
    - If any errors occur, the installer will provide information about the issue
 
 4. **Verify the Installation Completed Successfully**
+   ![image](https://github.com/user-attachments/assets/ccc0c70f-5e33-4b01-9e30-2351f9a65f3c)
+
    - Look for a message indicating the installation was successful
    - Note the URLs provided for accessing Automation Controller and Automation Hub
 
