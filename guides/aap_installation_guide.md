@@ -186,10 +186,10 @@ receptor_listener_port=27199
    - Password: `redhat` (as specified in the inventory file)
    - Click `Username/Password` and enter your `Developer` Username and password.
 ![image](https://github.com/user-attachments/assets/93a21b9e-6e24-4d0d-9ec4-585b6b8f262d)
-   - Click `Next`.
+   - Click `Next` & `Next` again.
+   - Accept the license agreement
 
 4. **Complete Initial Setup**
-   - Accept the license agreement
    - Create an organization
    - Create a project
 
