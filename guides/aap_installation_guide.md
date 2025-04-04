@@ -147,8 +147,8 @@ automationcatalog_pg_sslmode='prefer'
 # !! IMPORTANT: Replace placeholders with your actual Red Hat Registry Service Account credentials !!
 # Used to pull AAP container images during installation.
 registry_url='registry.redhat.io'
-registry_username='<YOUR_REDHAT_USERNAME_OR_SERVICE_ACCOUNT>'
-registry_password='<YOUR_REDHAT_PASSWORD_OR_TOKEN>'
+registry_username='<YOUR_REDHAT_DEVELOPER_USERNAME>'
+registry_password='<YOUR_REDHAT_DEVELOPER_PASSWORD'
 
 ### Receptor Communication ###
 # Port used for communication between Controller and Execution Nodes.
