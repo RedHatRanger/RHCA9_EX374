@@ -18,6 +18,7 @@ This guide provides step-by-step instructions for installing Ansible Automation 
 
 2. **Download the AAP Setup Bundle**
    - Go to `https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software`
+   - Download the `Ansible Automation Platform 2.5 Setup Bundle`.
 
 3. **Transfer the Bundle to Your VM**
    - Use SCP or another file transfer method to copy the bundle to your VM
