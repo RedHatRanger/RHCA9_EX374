@@ -35,9 +35,13 @@ This guide provides step-by-step instructions for installing Ansible Automation 
 
 2. **Extract the Bundle**
    ```bash
-   cd /home/rhel
+   sudo mv /home/rhel/ansible-automation-platform-setup-bundle-2.4-*.tar.gz /opt
+   cd /opt
+   sudo su
    tar -xvf ansible-automation-platform-setup-bundle-2.4-*.tar.gz
+   chmod -R 755 ansible-automation-platform-setup-bundle-2.4-*
    cd ansible-automation-platform-setup-bundle-2.4*/
+
    ```
 
 3. **Create a Backup of the Default Inventory File**
