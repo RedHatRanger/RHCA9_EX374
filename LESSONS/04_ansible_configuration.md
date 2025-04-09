@@ -1,4 +1,4 @@
-**Lesson 4 Summary: Managing Automation Controller Configuration (Simple Version)**
+**Chapter 4 Summary: Managing Automation Controller Configuration (Simple Version)**
 
 ---
 
@@ -82,6 +82,38 @@ You also learn about the **RBAC (Role-Based Access Control)** system, which help
 
 ---
 
+### 💻 Helpful Ansible CLI Commands You Might Use:
+These are useful to better understand how Ansible and automation controller manage configurations behind the scenes:
+These aren’t the focus of the controller UI, but knowing them helps understand the backend of automation setup:
+
+```bash
+# View Ansible configuration
+ansible-navigator config
+
+# Check current Ansible environment
+ansible-navigator settings
+
+# List installed collections
+ansible-navigator collections
+
+# Show documentation for a module
+ansible-navigator doc ansible.builtin.user
+
+# Run a playbook in stdout mode with a custom EE
+ansible-navigator run playbook.yml -m stdout --eei <execution-environment-name>
+
+# Dump the full configuration output for advanced troubleshooting
+ansible-navigator config -m stdout dump
+
+# List available actions and sections in ansible-navigator
+ansible-navigator config -m stdout list
+
+# Displays the contents for ansible.cfg configuration
+ansible-navigator config -m stdout view
+```  
+
+---
+
 ### 📦 What You Should Be Able to Do:
 - Change controller settings
 - Use RBAC to give users the right access
@@ -91,6 +123,7 @@ You also learn about the **RBAC (Role-Based Access Control)** system, which help
 ---
 
 This chapter is about **locking down your automation system** and organizing your team. Think of it like giving each person the right key to the right tool!
+
 
 <br><br><br><br>
 ---
