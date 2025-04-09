@@ -1,3 +1,90 @@
+**Lesson 9 Summary: Using Variables and Facts Effectively (Simple Version)**
+
+---
+
+### ✅ Objectives Checklist (EX374):
+- [ ] Use variables to customize tasks and playbooks
+- [ ] Understand and use facts collected from managed nodes
+- [ ] Use `set_fact` to define variables at runtime
+- [ ] Use filters and default values to handle undefined variables
+- [ ] Organize host and group variables using directories like `host_vars/` and `group_vars/`
+
+---
+
+### 🧠 What You Learn in This Chapter:
+This chapter shows you how to use **variables** to make playbooks smarter and **facts** to get data from the systems you're automating. You’ll learn to set your own variables, use facts gathered automatically, and organize them in files and folders.
+
+You also learn how to **avoid errors with undefined variables**, and how to use filters to shape your data.
+
+---
+
+### 🎯 Why It Matters for the EX374 Exam:
+- You need to use variables correctly to write flexible playbooks
+- You’ll need to pull data from facts like OS, IP address, or hostname
+- The exam may test your ability to avoid breaking your playbook when a variable is missing
+
+---
+
+### ✅ Easy Terms:
+- **Variable**: A name that holds a value (like a username, path, or list)
+- **Fact**: Info about a system that Ansible collects automatically
+- **set_fact**: A module that creates a variable while a playbook is running
+- **Filter**: A Jinja2 tool that changes a variable’s value (like making it all uppercase)
+- **default filter**: A backup value if the variable is not defined
+
+---
+
+### 📘 Examples:
+#### Using a fact:
+```yaml
+- name: Show the system architecture
+  debug:
+    var: ansible_facts['architecture']
+```
+
+#### Using `set_fact`:
+```yaml
+- name: Define a custom variable
+  set_fact:
+    my_message: "Hello from {{ inventory_hostname }}!"
+```
+
+#### Using a default filter:
+```yaml
+- name: Use a fallback if the variable is missing
+  debug:
+    msg: "The app is {{ app_name | default('MyApp') }}"
+```
+
+---
+
+### 💻 Helpful Commands:
+```bash
+# Gather and view facts manually from a host
+ansible node1.lab.example.com -m setup
+
+# Display all variables and facts in a playbook run
+ansible-navigator run play.yml -m stdout -i inventory/hosts.yml
+
+# Test a playbook that uses host/group variables
+ansible-navigator run web.yml -i inventory/hosts.yml
+```
+
+---
+
+### 📦 What You Should Be Able to Do:
+- Use variables and facts in tasks and templates
+- Define variables during a playbook run with `set_fact`
+- Use filters and defaults to prevent errors
+- Organize host and group variables into folders
+
+---
+
+This chapter is about making your playbooks **smart and safe** by using the right values in the right places!
+
+<br><br><br><br>
+---
+
 **Lesson 9 Quiz: Using Variables and Facts Effectively**
 
 ---
