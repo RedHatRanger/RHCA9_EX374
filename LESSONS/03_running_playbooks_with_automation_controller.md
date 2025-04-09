@@ -106,69 +106,6 @@ Below are the step-by-step instructions to complete your setup using the **Autom
 ```bash
 curl http://node1.lab.example.com
 ```
-# Open the controller web UI in your browser
-https://<controller-hostname>
-```
-
-```bash
-# Log in to the UI
-username: admin
-default password (first login): <your-admin-password>
-```
-
-```bash
-# Create Source Control Credential
-controller credential create \
-  --name reviewgitcred \
-  --type "Source Control" \
-  --username student \
-  --ssh-private-key /home/student/.ssh/gitlab_rsa
-```
-
-```bash
-# Create Machine Credential
-controller credential create \
-  --name reviewmachinecred \
-  --type "Machine" \
-  --username devops \
-  --ssh-private-key /home/student/.ssh/lab_rsa \
-  --become-method sudo
-```
-
-```bash
-# Create Inventory and Add Host
-controller inventory create --name reviewinventory
-controller host add --inventory reviewinventory --name node1.lab.example.com
-```
-
-```bash
-# Create Project
-controller project create \
-  --name reviewproject \
-  --scm-url git@git.lab.example.com:student/controller-review.git \
-  --credential reviewgitcred
-```
-
-```bash
-# Create Job Template
-controller job-template create \
-  --name reviewtemplate \
-  --inventory reviewinventory \
-  --project reviewproject \
-  --playbook webserver.yml \
-  --credential reviewmachinecred \
-  --execution-environment "Default EE"
-```
-
-```bash
-# Launch the Job
-controller job-template launch --name reviewtemplate
-```
-
-```bash
-# Verify success (from CLI or browser)
-curl http://node1.lab.example.com
-```
 
 ---
 
@@ -181,9 +118,6 @@ curl http://node1.lab.example.com
 ---
 
 This chapter is about using the **control center for Ansible**—the automation controller. You’re not just running playbooks anymore—you’re managing them like a pro!
-
-
-
 
 
 <br><br><br><br>
