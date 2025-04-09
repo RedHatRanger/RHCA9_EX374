@@ -1,35 +1,45 @@
-**Lesson 1 Summary: Developing Playbooks with Ansible Automation Platform 2**
+**Chapter 1 Summary: Developing Playbooks with Ansible Automation Platform 2 (Simple Version)**
 
 ---
 
-### 📘 Chapter Overview:
-Chapter 1 introduces the foundational changes in Ansible Automation Platform (AAP) 2 and the tooling used to manage, develop, and execute automation content. The primary focus is on the shift from traditional Ansible CLI tools to the use of **Automation Content Navigator** and **Execution Environments (EEs)**. The chapter helps learners get familiar with:
-
-- How playbooks are developed and run using `ansible-navigator`
-- The purpose and structure of Execution Environments
-- The concept of collections in Ansible
-- Viewing documentation and configuration using the new tools
-
-This chapter is about **getting hands-on quickly** with AAP 2’s CLI and containerized toolchain.
-
----
-
-### 🧠 Key Concepts:
-- `ansible-navigator` replaces multiple tools like `ansible-playbook`, `ansible-doc`, and `ansible-config`
-- Execution Environments (EEs) are container images that package Ansible, Python dependencies, and collections
-- Content Collections are modular bundles of roles, modules, and plugins
-- Automation Hub and Private Automation Hub are used to host and curate collections
-- `ansible-navigator` can be run in interactive (TUI) mode or stdout mode
+### ✅ Objectives Checklist (EX374):
+- [ ] Use Git to clone, edit, and push changes to a repository
+- [ ] Identify and run playbooks stored in a Git repository
+- [ ] Use `ansible-navigator` to run automation tasks and playbooks
+- [ ] Use `become` to run tasks with admin privileges
+- [ ] Understand what execution environments are and how to use them
+- [ ] Use `ansible-navigator` to explore Ansible content collections
+- [ ] Find help for Ansible modules and configuration settings using navigator
 
 ---
 
-### 💻 Commands Used in Chapter 1:
+### 🧠 What You Learn in This Chapter:
+This chapter teaches you how to use **Ansible Navigator** instead of old Ansible tools. It also shows you how to use something called an **Execution Environment**, which is like a box that holds all your Ansible tools.
 
+You’ll also learn what **collections** are (they are bundles of Ansible stuff like tasks and roles), and how to look at your Ansible setup using commands.
+
+---
+
+### 🎯 Why It Matters for the EX374 Exam:
+This chapter helps with these test skills:
+- **Using Git** (cloning, editing files, pushing changes)
+- **Running tasks with Ansible** (doing tasks with or without admin power)
+
+---
+
+### ✅ Easy Terms:
+- **Ansible Navigator**: A new tool that helps you run Ansible in a nice and simple way
+- **Execution Environment**: A container (like a toolkit in a backpack) that has everything Ansible needs
+- **Collection**: A bundle of tools that work with Ansible
+
+---
+
+### 💻 Commands You Practice:
 ```bash
-# Create a working directory
+# Make a new folder and go there
 mkdir -p ~/ansible-aap/ch1 && cd ~/ansible-aap/ch1
 
-# Sample playbook
+# Make a simple playbook file
 cat <<EOF > web_setup.yml
 ---
 - name: Install and start Apache
@@ -47,39 +57,41 @@ cat <<EOF > web_setup.yml
         enabled: true
 EOF
 
-# Run playbook using ansible-navigator in stdout mode
+# Run the playbook in plain text mode
 ansible-navigator run web_setup.yml -m stdout --eei ee-supported-rhel8
 
-# Run ansible-navigator in TUI mode (interactive)
+# Run in interactive mode
 ansible-navigator --eei ee-supported-rhel8
 
-# Inside TUI: Run the playbook interactively
+# Then in the menu, type this to run the playbook
 :run web_setup.yml
 
-# View documentation for a module (e.g., yum)
+# See help for a module
 ansible-navigator doc yum
 
-# View current Ansible config
+# Look at Ansible’s settings
 ansible-navigator config
 
-# View settings specific to automation content navigator
+# Look at Navigator’s own settings
 ansible-navigator settings
 
-# List installed collections
+# See which collections are installed
 ansible-navigator collections
 ```
 
 ---
 
-### ✅ Outcomes by the End of Chapter:
-- You should be able to create and run a playbook using `ansible-navigator`
-- You understand how execution environments isolate your automation logic
-- You know how to explore configuration, documentation, and collections with navigator
-- You’re familiar with Red Hat’s ecosystem for managing and curating Ansible content
+### 📦 What You Should Be Able to Do:
+- Make and run a simple playbook with Navigator
+- Use the built-in tools in the Execution Environment
+- Look up help and settings using Navigator
+- Know where your Ansible stuff (collections) lives
 
 ---
 
-This chapter lays the groundwork for using the platform’s new tooling and helps you shift your mindset toward **containerized and modular automation workflows.**
+This chapter is like your **first lesson in using a new toolbox**. You’ll use these tools in every other chapter!
+
+<br><br><br>
 
 ---
 
