@@ -110,6 +110,11 @@ ansible-navigator config -m stdout list
 
 # Displays the contents for ansible.cfg configuration
 ansible-navigator config -m stdout view
+
+# View effective config using a specific execution environment and playbook path
+ansible-navigator config \
+  --eei hub.lab.example.com/ee-supported-rhel8 \
+  --pp missing
 ```  
 
 ---
