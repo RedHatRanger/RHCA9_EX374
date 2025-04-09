@@ -1,3 +1,116 @@
+**lESSON 7 Summary: Building Reusable Playbooks with Roles (Simple Version)**
+
+---
+
+### ✅ Objectives Checklist (EX374):
+- [ ] Understand the structure of a role and its purpose
+- [ ] Use the `ansible-galaxy` command to create and manage roles
+- [ ] Reuse role content in playbooks and templates
+- [ ] Apply variables, handlers, and templates inside a role
+- [ ] Set role dependencies and defaults
+
+---
+
+### 🧠 What You Learn in This Chapter:
+This chapter shows you how to **organize your playbooks into roles** so that they are cleaner, easier to reuse, and more manageable. Roles help break big projects into smaller, reusable chunks.
+
+You learn how to build your own roles, use roles from collections, and make your roles flexible by adding variables, templates, and handlers. You also learn about role dependencies and default values.
+
+---
+
+### 🎯 Why It Matters for the EX374 Exam:
+- Roles are one of the most important ways to reuse automation code
+- The exam may ask you to build, apply, or troubleshoot roles
+- Understanding role structure helps you read and write organized playbooks
+
+---
+
+### ✅ Easy Terms:
+- **Filter**: A tool used in Jinja2 to change or format data in a variable (like turning 'yes' into 'YES', or filtering a list)
+- **Role**: A folder structure that holds reusable tasks, variables, templates, and more
+- **Handler**: A task that runs only when notified (often used to restart a service)
+- **Template**: A dynamic configuration file that uses variables
+- **Defaults**: Variables that can be easily overridden by other variables
+- **Dependencies**: Other roles that this role needs to work
+
+---
+
+### 📘 Example Use of a Filter:
+Here’s how a filter might be used in a template:
+
+```jinja
+# inside templates/index.html.j2
+Welcome, {{ username | upper }}!
+```
+
+This turns the value of `username` into all uppercase letters.
+
+---
+
+### 🛠️ Role Creation Steps:
+
+#### 1. Create a Role
+```bash
+ansible-galaxy init webrole
+```
+
+#### 2. Add Tasks to the Role
+- Open `webrole/tasks/main.yml`
+- Add tasks like installing packages, configuring files, or starting services
+
+#### 3. Add Variables
+- Use `defaults/main.yml` for variables users can override
+- Use `vars/main.yml` for fixed variables that are harder to override
+
+#### 4. Add Templates or Handlers
+- Add Jinja2 templates to `templates/`
+- Add restart/reload handlers to `handlers/main.yml`
+
+#### 5. Use the Role in a Playbook
+```yaml
+- name: Apply webrole
+  hosts: node1.lab.example.com
+  roles:
+    - webrole
+```
+
+#### 6. Define Role Dependencies (Optional)
+- In `meta/main.yml`, add:
+```yaml
+dependencies:
+  - role: firewall
+  - role: monitoring
+```
+
+---
+
+### 💻 Helpful Commands:
+```bash
+# Create a new role scaffold
+ansible-galaxy init <role-name>
+
+# Install a role from Ansible Galaxy
+ansible-galaxy install <namespace.role>
+
+# List installed roles
+ansible-galaxy list
+```
+
+---
+
+### 📦 What You Should Be Able to Do:
+- Organize tasks into a clean role structure
+- Use roles inside playbooks
+- Create templates and handlers for flexibility
+- Share and reuse roles across projects
+
+---
+
+This chapter is about writing **modular Ansible code**. Roles make your automation easier to build, share, and manage!
+
+<br><br><br><br>
+---
+
 **Lesson 7 Quiz: Creating Reusable Content with Roles**
 
 ---
