@@ -1,3 +1,88 @@
+**Lesson 1 Summary: Developing Playbooks with Ansible Automation Platform 2**
+
+---
+
+### 📘 Chapter Overview:
+Chapter 1 introduces the foundational changes in Ansible Automation Platform (AAP) 2 and the tooling used to manage, develop, and execute automation content. The primary focus is on the shift from traditional Ansible CLI tools to the use of **Automation Content Navigator** and **Execution Environments (EEs)**. The chapter helps learners get familiar with:
+
+- How playbooks are developed and run using `ansible-navigator`
+- The purpose and structure of Execution Environments
+- The concept of collections in Ansible
+- Viewing documentation and configuration using the new tools
+
+This chapter is about **getting hands-on quickly** with AAP 2’s CLI and containerized toolchain.
+
+---
+
+### 🧠 Key Concepts:
+- `ansible-navigator` replaces multiple tools like `ansible-playbook`, `ansible-doc`, and `ansible-config`
+- Execution Environments (EEs) are container images that package Ansible, Python dependencies, and collections
+- Content Collections are modular bundles of roles, modules, and plugins
+- Automation Hub and Private Automation Hub are used to host and curate collections
+- `ansible-navigator` can be run in interactive (TUI) mode or stdout mode
+
+---
+
+### 💻 Commands Used in Chapter 1:
+
+```bash
+# Create a working directory
+mkdir -p ~/ansible-aap/ch1 && cd ~/ansible-aap/ch1
+
+# Sample playbook
+cat <<EOF > web_setup.yml
+---
+- name: Install and start Apache
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Install httpd
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+    - name: Start and enable httpd
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+EOF
+
+# Run playbook using ansible-navigator in stdout mode
+ansible-navigator run web_setup.yml -m stdout --eei ee-supported-rhel8
+
+# Run ansible-navigator in TUI mode (interactive)
+ansible-navigator --eei ee-supported-rhel8
+
+# Inside TUI: Run the playbook interactively
+:run web_setup.yml
+
+# View documentation for a module (e.g., yum)
+ansible-navigator doc yum
+
+# View current Ansible config
+ansible-navigator config
+
+# View settings specific to automation content navigator
+ansible-navigator settings
+
+# List installed collections
+ansible-navigator collections
+```
+
+---
+
+### ✅ Outcomes by the End of Chapter:
+- You should be able to create and run a playbook using `ansible-navigator`
+- You understand how execution environments isolate your automation logic
+- You know how to explore configuration, documentation, and collections with navigator
+- You’re familiar with Red Hat’s ecosystem for managing and curating Ansible content
+
+---
+
+This chapter lays the groundwork for using the platform’s new tooling and helps you shift your mindset toward **containerized and modular automation workflows.**
+
+---
+
 **Lesson 1 Quiz: Red Hat Ansible Automation Platform 2**
 
 ---
