@@ -1,3 +1,69 @@
+**Chapter 3 Summary: Running Playbooks with Automation Controller (Simple Version)**
+
+---
+
+### ✅ Objectives Checklist (EX374):
+- [ ] Understand how automation controller (formerly Ansible Tower) works
+- [ ] Create and use projects, inventories, credentials, and job templates
+- [ ] Launch and monitor jobs in the web UI
+- [ ] Use automation controller with execution environments (EEs)
+- [ ] Understand automation mesh and how it connects different nodes
+
+---
+
+### 🧠 What You Learn in This Chapter:
+This chapter teaches you how to use the **automation controller**, which is the web-based version of Ansible. It lets you run playbooks, store your inventory, and schedule jobs—all in one place.
+
+You learn about the controller’s building blocks:
+- **Projects** (where your playbooks come from)
+- **Inventories** (what systems you manage)
+- **Credentials** (secure login info)
+- **Job Templates** (how everything connects to run a playbook)
+
+You also see how it works with execution environments and automation mesh (a system for spreading out the work).
+
+---
+
+### 🎯 Why It Matters for the EX374 Exam:
+- You’ll need to create and manage controller resources
+- You must know how to run and monitor playbook jobs in the UI
+- You should understand how controller connects to your EEs and systems
+
+---
+
+### ✅ Easy Terms:
+- **Automation Controller**: A web app that helps run and manage playbooks
+- **Project**: A source for your playbooks (like a Git repo)
+- **Inventory**: The list of systems you manage
+- **Job Template**: The settings used to run a playbook
+- **Automation Mesh**: A way to run jobs across multiple machines
+
+---
+
+### 💻 Things You Do in This Chapter:
+- Log in to the controller web interface
+- Create a project linked to a Git repo
+- Make an inventory and add hosts
+- Add credentials (SSH, vault, etc.)
+- Create a job template that ties it all together
+- Launch the job and see the output in real time
+- Check the job history, output, and logs
+
+---
+
+### 📦 What You Should Be Able to Do:
+- Set up the core parts of automation controller
+- Run a playbook job through the UI
+- Use controller with execution environments
+- Understand what automation mesh is and when it’s used
+
+---
+
+This chapter is about using the **control center for Ansible**—the automation controller. You’re not just running playbooks anymore—you’re managing them like a pro!
+
+<br><br><br><br>
+---
+
 **Lesson 3 Quiz: Running Playbooks with Automation Controller**
 
 ---
