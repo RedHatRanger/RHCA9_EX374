@@ -1,4 +1,4 @@
-**Chapter 3 Quiz: Running Playbooks with Automation Controller**
+**Lesson 3 Quiz: Running Playbooks with Automation Controller**
 
 ---
 
