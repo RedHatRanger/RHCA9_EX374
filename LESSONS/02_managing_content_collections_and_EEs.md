@@ -1,4 +1,4 @@
-**Chapter 2 Quiz: Managing Content Collections and Execution Environments**
+**Lesson 2 Quiz: Managing Content Collections and Execution Environments**
 
 ---
 
