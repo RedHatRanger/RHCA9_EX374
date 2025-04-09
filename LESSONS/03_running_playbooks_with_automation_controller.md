@@ -1,4 +1,4 @@
-**Chapter 3 Summary: Running Playbooks with Automation Controller (Simple Version)**
+**Lesson 3 Summary: Running Playbooks with Automation Controller (Simple Version)**
 
 ---
 
@@ -42,9 +42,70 @@ You also see how it works with execution environments and automation mesh (a sys
 
 ### 🛠️ Setup Instructions for AAP 2.4 (Web UI Style):
 
-> These are step-by-step **UI actions** written in command style to help you understand what you’re doing when working in Automation Controller:
+Below are the step-by-step instructions to complete your setup using the **Automation Controller web interface**:
 
+#### 1. Log in to the Automation Controller
+- Open your web browser and go to `https://<controller-hostname>`
+- Log in with your `admin` credentials
+
+#### 2. Create a Source Control Credential
+- Go to **Resources > Credentials**
+- Click **Add**
+- **Name**: reviewgitcred
+- **Credential Type**: Source Control
+- **Username**: student
+- **SSH Private Key**: paste `/home/student/.ssh/gitlab_rsa`
+- Click **Save**
+
+#### 3. Create a Machine Credential
+- Go to **Resources > Credentials**
+- Click **Add**
+- **Name**: reviewmachinecred
+- **Credential Type**: Machine
+- **Username**: devops
+- **SSH Private Key**: paste `/home/student/.ssh/lab_rsa`
+- **Privilege Escalation Method**: sudo
+- Click **Save**
+
+#### 4. Create an Inventory and Add a Host
+- Go to **Resources > Inventories**
+- Click **Add** > **Inventory**
+- **Name**: reviewinventory
+- Click **Save**
+- Click the new inventory and go to **Hosts**
+- Click **Add**
+- **Host Name**: node1.lab.example.com
+- Click **Save**
+
+#### 5. Create a Project
+- Go to **Resources > Projects**
+- Click **Add**
+- **Name**: reviewproject
+- **SCM Type**: Git
+- **SCM URL**: `git@git.lab.example.com:student/controller-review.git`
+- **Credential**: reviewgitcred
+- Click **Save**
+
+#### 6. Create a Job Template
+- Go to **Resources > Templates**
+- Click **Add** > **Job Template**
+- **Name**: reviewtemplate
+- **Inventory**: reviewinventory
+- **Project**: reviewproject
+- **Playbook**: webserver.yml
+- **Credential**: reviewmachinecred
+- **Execution Environment**: Default EE
+- Click **Save**
+
+#### 7. Launch the Job
+- Go to **Templates**
+- Click the **rocket/launch icon** next to `reviewtemplate`
+
+#### 8. Verify the Result
+- Run this command from any terminal:
 ```bash
+curl http://node1.lab.example.com
+```
 # Open the controller web UI in your browser
 https://<controller-hostname>
 ```
@@ -120,6 +181,8 @@ curl http://node1.lab.example.com
 ---
 
 This chapter is about using the **control center for Ansible**—the automation controller. You’re not just running playbooks anymore—you’re managing them like a pro!
+
+
 
 
 
