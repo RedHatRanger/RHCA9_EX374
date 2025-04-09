@@ -1,3 +1,98 @@
+**Lesson 10 Summary: Controlling Task Execution with Conditionals (Simple Version)**
+
+---
+
+### ✅ Objectives Checklist (EX374):
+- [ ] Use `when` to run tasks only when a condition is true
+- [ ] Handle undefined variables with `default` or `is defined`
+- [ ] Use logical operators (and, or, not) in conditions
+- [ ] Apply conditionals inside loops
+- [ ] Test values in lists or match patterns
+
+---
+
+### 🧠 What You Learn in This Chapter:
+This chapter teaches you how to control when a task should run in your playbook. You’ll use the `when` keyword to make sure tasks only run when needed.
+
+You also learn how to handle variables that may not be defined, and how to build smarter conditions using **filters** and **logic**.
+
+---
+
+### 🎯 Why It Matters for the EX374 Exam:
+- You need to be able to control task flow using conditions
+- The exam may ask you to skip or include tasks based on facts or variable values
+- Using `when`, `default`, and `is defined` correctly can prevent errors
+
+---
+
+### ✅ Easy Terms:
+- **when**: A keyword that tells Ansible to run a task only if the condition is true
+- **is defined**: A check to see if a variable exists before using it
+- **default**: A backup value used when a variable is missing
+- **Logical Operators**: Words like `and`, `or`, and `not` to combine conditions
+
+---
+
+### 📘 Examples:
+#### Basic `when` condition:
+```yaml
+- name: Restart Apache only if it’s installed
+  service:
+    name: httpd
+    state: restarted
+  when: ansible_facts['pkg_mgr'] == 'yum'
+```
+
+#### Check if variable exists:
+```yaml
+- name: Only run if the app_name variable is defined
+  debug:
+    msg: "Deploying {{ app_name }}"
+  when: app_name is defined
+```
+
+#### Use a fallback value:
+```yaml
+- name: Use default app name if not set
+  debug:
+    msg: "Starting {{ app_name | default('MyApp') }}"
+```
+
+#### Use `when` in a loop:
+```yaml
+- name: Only print names with an "a"
+  debug:
+    msg: "{{ item }} has an 'a' in it"
+  loop:
+    - bob
+    - anna
+    - eli
+  when: "a" in item
+```
+
+---
+
+### 💻 Helpful Commands:
+```bash
+# Run a playbook using conditionals and variables
+ansible-navigator run site.yml -i inventory/hosts.yml -m stdout
+```
+
+---
+
+### 📦 What You Should Be Able to Do:
+- Use `when` to control tasks
+- Avoid errors with `default` and `is defined`
+- Combine conditions using logic
+- Apply conditionals inside loops
+
+---
+
+This chapter helps you write **smarter playbooks that do the right thing at the right time**!
+
+<br><br><br><br>
+---
+
 **Lesson 10 Quiz: Controlling Task Execution with Conditionals**
 
 ---
