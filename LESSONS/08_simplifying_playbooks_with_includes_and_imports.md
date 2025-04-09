@@ -1,3 +1,91 @@
+**Lesson 8 Summary: Simplifying Playbooks with Includes and Imports (Simple Version)**
+
+---
+
+### ✅ Objectives Checklist (EX374):
+- [ ] Use `import_tasks` and `include_tasks` to reuse task files
+- [ ] Understand when includes are processed (runtime vs. parse time)
+- [ ] Use `import_playbook` to combine playbooks
+- [ ] Use includes conditionally or in loops
+- [ ] Keep playbooks clean and organized using includes/imports
+
+---
+
+### 🧠 What You Learn in This Chapter:
+This chapter shows you how to keep your playbooks short and neat by moving tasks into smaller files and pulling them in with `import` and `include` commands.
+
+You’ll learn how and when to use `import_tasks`, `include_tasks`, and `import_playbook`. You’ll also learn when Ansible processes each one (at the beginning or during the run).
+
+---
+
+### 🎯 Why It Matters for the EX374 Exam:
+- These tools are used to break up large playbooks into smaller, reusable pieces
+- The exam may test whether you understand how conditional logic works with includes vs imports
+- Organizing tasks cleanly is key to writing good automation code
+
+---
+
+### ✅ Easy Terms:
+- **import_tasks**: Pulls in a file of tasks before the play runs (parse-time)
+- **include_tasks**: Pulls in tasks while the play is running (runtime)
+- **import_playbook**: Pulls in an entire playbook file before the play runs
+
+---
+
+### 📘 Example:
+Let’s say you have a playbook that installs software, configures it, and starts a service. You can split these into three files:
+
+- `install.yml`
+- `configure.yml`
+- `start.yml`
+
+Now your main playbook can look like this:
+```yaml
+- name: Setup App
+  hosts: node1.lab.example.com
+  become: true
+  tasks:
+    - import_tasks: install.yml
+    - import_tasks: configure.yml
+    - import_tasks: start.yml
+```
+
+Or if you want to use conditions or loops:
+```yaml
+- name: Conditional Setup
+  hosts: node1.lab.example.com
+  become: true
+  tasks:
+    - include_tasks: install.yml
+      when: install_app
+```
+
+---
+
+### 💻 Helpful Commands:
+```bash
+# Check syntax of a playbook that uses includes/imports
+ansible-navigator run main.yml --syntax-check
+
+# Run a playbook that uses import_playbook
+ansible-navigator run site.yml -m stdout
+```
+
+---
+
+### 📦 What You Should Be Able to Do:
+- Clean up big playbooks by splitting them into smaller files
+- Choose between import and include based on when you need it to run
+- Combine playbooks with import_playbook
+- Use conditional includes safely and correctly
+
+---
+
+This chapter is all about making your automation files **easy to read, reuse, and manage**!
+
+<br><br><br><br>
+---
+
 **Lesson 8 Quiz: Simplifying Playbooks with Includes and Imports**
 
 ---
