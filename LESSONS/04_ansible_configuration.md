@@ -1,4 +1,4 @@
-**Chapter 4 Quiz: Working with Ansible Configuration Settings**
+**Lesson 4 Quiz: Working with Ansible Configuration Settings**
 
 ---
 
