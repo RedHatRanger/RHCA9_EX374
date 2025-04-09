@@ -1,4 +1,4 @@
-**Chapter 4 Summary: Managing Automation Controller Configuration (Simple Version)**
+**Lesson 4 Summary: Managing Automation Controller Configuration (Simple Version)**
 
 ---
 
@@ -112,6 +112,7 @@ ansible-navigator config -m stdout list
 ansible-navigator config -m stdout view
 
 # View effective config using a specific execution environment and playbook path
+# Shows only Ansible config values that are missing or unset
 ansible-navigator config \
   --eei hub.lab.example.com/ee-supported-rhel8 \
   --pp missing
