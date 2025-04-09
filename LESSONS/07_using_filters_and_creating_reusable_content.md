@@ -1,4 +1,4 @@
-**lESSON 7 Summary: Building Reusable Playbooks with Roles (Simple Version)**
+**Lesson 7 Summary: Building Reusable Playbooks with Roles (Simple Version)**
 
 ---
 
@@ -35,22 +35,24 @@ You learn how to build your own roles, use roles from collections, and make your
 
 ---
 
-### 📘 Example Use of a Filter:
-Here’s how a filter might be used in a template:
+### 📘 Filters Made Easy:
+Filters help you clean up or change data before showing or using it. They work inside Jinja2 templates, which use double curly braces like this: `{{ ... }}`.
 
+Think of a filter like a tool that transforms something. You pass your variable through a filter to change how it looks or behaves.
+
+For example:
 ```jinja
 # inside templates/index.html.j2
 Welcome, {{ username | upper }}!
 ```
 
-This turns the value of `username` into all uppercase letters.
+This means if `username` was `alex`, it would show up as `ALEX` on the web page.
 
 ---
 
 ### 🛠️ Role Creation Steps:
 
 #### 1. Create a Role
-```bash
 ansible-galaxy init webrole
 ```
 
