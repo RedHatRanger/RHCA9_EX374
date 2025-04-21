@@ -47,7 +47,7 @@
 
 ---
 
-### ✅ Summary
+### Summary
 
 AAP UI is mandatory mainly for operations involving Automation Controller job templates, managing credentials, integrating execution environments with Controller, and pulling content directly from Git or Automation Hub via Controller.
 
