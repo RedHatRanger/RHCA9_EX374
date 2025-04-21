@@ -3,9 +3,7 @@
 **Objectives**
 
 1. **Delegate task execution** to a different host using `delegate_to`.  
-   _Source: Chapter 8 “Delegating Tasks and Facts”_ citeturn0file0
 2. **Control fact delegation**—decide whether the task’s registered variables are stored under the target host or the controller—using `delegate_facts`.  
-   _Source: Chapter 8 “Delegating Tasks and Facts”_ citeturn0file0
 
 ---
 
