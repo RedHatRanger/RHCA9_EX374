@@ -1,127 +1,138 @@
-# Lab: Manage Inventories and Credentials
+**Lab 8: Managing Inventories & Credentials**
 
-## Overview
+**Objectives**
 
-In this lab, you will:
-
-1. Create a **source control credential** to retrieve a playbook from a Git repository.
-2. Create a **machine credential** to connect to your managed host.
-3. Set up an **inventory** and add the managed host to it.
-4. Create a **project** pointing to a Git repo (`controller-review.git`) containing a simple playbook.
-5. Define a **job template** that runs `webserver.yml` using a specified execution environment.
-6. Confirm the deployed web page by curling or browsing to your host.
-
-### Final Outcome
-
-You’ll see **“Successful playbook run from automation controller.”** when accessing `http://node1.lab.example.com` after the job finishes.
+1. **Manage advanced inventories** (static & grouped variables)
+2. **Create a dynamic inventory** from an identity management server or a database server
+3. **Create machine credentials** to access inventory hosts in Automation Controller
+4. **Create a source control credential** in Automation Controller
 
 ---
 
-## 1. Create a Source Control Credential: **reviewgitcred**
+### Introduction
+In this lab you will explore both static and dynamic inventory management with Ansible Automation Platform 2.4. You’ll build a multi‑file inventory hierarchy with group_vars/ and host_vars/, then configure two types of dynamic inventories (LDAP and database). Finally, you’ll switch to the Automation Controller UI to define machine and source control credentials, enabling secure access to managed hosts and repositories.
 
-1. Log into Automation Controller at `https://controller.lab.example.com` as **admin/redhat**.
-2. Navigate to **Resources → Credentials** → **Add**.
-3. Enter:
-   - **Name**: `reviewgitcred`
-   - **Organization**: `Default`
-   - **Credential Type**: `Source Control`
+### Environment & Setup
+- **Control node**: `workstation.lab.example.com` (user `rhel`, password `redhat`)
+- **Automation Controller**: `controller.lab.example.com` (user `rhel`, password `redhat`)
+- **Static inventory root**: `~/lab8-inventories/`
+- **Dynamic inventory plugins**: `ldap` (python-ldap) and `community.mysql.mysql`
+
+```bash
+ssh rhel@workstation.lab.example.com      # password: redhat
+sudo yum install -y ansible python3-ldap python3-PyMySQL
+mkdir -p ~/lab8-inventories/{inventories/{prod,dev}/{group_vars,host_vars},plugins/inventory}
+cd ~/lab8-inventories
+```  
+
+---
+
+## 1. Manage advanced (static) inventories ← Objective 1
+
+1. **Create a production inventory** in `inventories/prod/inventory`:
+
+   ```ini
+   [webservers]
+   node1.lab.example.com
+   node2.lab.example.com
+
+   [databases]
+   db1.lab.example.com
+   db2.lab.example.com
+   ```
+
+2. **Define group variables** for `webservers` in `inventories/prod/group_vars/webservers.yml`:
+
+   ```yaml
+   http_port: 8080    # example of grouped var overriding defaults
+   ```
+
+3. **Define host-specific variables** in `inventories/prod/host_vars/node1.lab.example.com.yml`:
+
+   ```yaml
+   ansible_port: 2222       # override SSH port for a single host
+   ansible_user: deploy     # override SSH user
+   ```
+
+4. **Validate** by listing inventory and showing vars:
+
+   ```bash
+   ansible-inventory -i inventories/prod/inventory --list
+   ansible-inventory -i inventories/prod/inventory --host node1.lab.example.com
+   ```
+
+---
+
+## 2. Create a dynamic inventory ← Objective 2
+
+### A. LDAP-based dynamic inventory (Identity Management)
+
+1. **Place the LDAP plugin config** in `plugins/inventory/ldap_inventory.yml`:
+   ```yaml
+   plugin: ldap
+   # demo values; replace with your IDM server details
+   uri: ldap://idm.example.com
+   bind_dn: 'cn=admin,dc=example,dc=com'
+   bind_pw: 'redhat'
+   base_dn: 'dc=example,dc=com'
+   group_search:
+     filter: '(objectClass=groupOfNames)'
+     attribute: cn
+   host_search:
+     filter: '(objectClass=person)'
+     attribute: cn
+   ```
+
+2. **Test the LDAP inventory**:
+   ```bash
+   ansible-inventory -i plugins/inventory/ldap_inventory.yml --list
+   ```
+
+### B. Database-based dynamic inventory
+
+1. **Place the MySQL plugin config** in `plugins/inventory/db_inventory.yml`:
+   ```yaml
+   plugin: community.mysql.mysql
+   db_host: db.example.com
+   db_user: ansible
+   db_pass: redhat
+   query: |
+     SELECT hostname, ip_address, role FROM servers;
+   keyed_groups:
+     - key: role
+       prefix: role_
+   ```
+
+2. **Test the MySQL inventory**:
+   ```bash
+   ansible-inventory -i plugins/inventory/db_inventory.yml --list
+   ```
+
+---
+
+## 3. Create machine credentials in Controller ← Objective 3
+
+1. **Log in** to the Automation Controller UI at `https://controller.lab.example.com` with `rhel/redhat`.
+2. Navigate to **Credentials » Add Credential » Machine**.
+3. **Name**: `lab8-machine`, **Description**: `SSH to managed hosts`
+4. **Credential Type**: Machine
    - **Username**: `rhel`
-   - **SCM Private Key**: contents of `/home/rhel/.ssh/gitlab_rsa`
-4. **Save**.
+   - **Password**: `redhat`
+   - Or **Private Key**: Upload or paste key
+5. **Save** and **Test** against one host (e.g., `node1.lab.example.com`).
 
 ---
 
-## 2. Create a Machine Credential: **reviewmachinecred**
+## 4. Create a source control credential ← Objective 4
 
-1. **Resources → Credentials** → **Add**.
-2. Enter:
-   - **Name**: `reviewmachinecred`
-   - **Organization**: `Default`
-   - **Credential Type**: `Machine`
-   - **Username**: `devops`
-   - **SSH Private Key**: contents of `/home/rhel/.ssh/lab_rsa`
-   - **Privilege Escalation Method**: `sudo`
-   - **Privilege Escalation Username**: `root`
-3. **Save**.
+1. In **Controller UI**, go to **Credentials » Add Credential » Source Control**.
+2. **Name**: `lab8-git`, **Description**: `GitHub token for playbook repo`
+3. **Credential Type**: Source Control
+   - **SCM Type**: Git
+   - **Username**: your GitHub username
+   - **Password/Token**: GitHub personal access token
+4. **Save** and optionally **Test** by linking a project.
 
 ---
 
-## 3. Create an Inventory: **reviewinventory**
-
-1. **Resources → Inventories** → **Add → Add inventory**.
-2. Enter:
-   - **Name**: `reviewinventory`
-   - **Organization**: `Default`
-3. **Save**.
-4. Click the **Hosts** tab, then **Add**.
-5. Enter `node1.lab.example.com` and **Save**.
-
----
-
-## 4. Create a Project: **reviewproject**
-
-1. **Resources → Projects** → **Add**.
-2. Enter:
-   - **Name**: `reviewproject`
-   - **Organization**: `Default`
-   - **Source Control Type**: `Git`
-   - **Source Control URL**: `git@git.lab.example.com:rhel/controller-review.git`
-   - **Source Control Credential**: `reviewgitcred`
-3. **Save**.
-4. The project should **sync** automatically. Confirm it **Succeeds**.
-
----
-
-## 5. Create a Job Template: **reviewtemplate**
-
-1. **Resources → Templates** → **Add → Add job template**.
-2. Enter:
-   - **Name**: `reviewtemplate`
-   - **Inventory**: `reviewinventory`
-   - **Project**: `reviewproject`
-   - **Execution Environment**: `Automation Hub Default execution environment`
-   - **Playbook**: `webserver.yml`
-   - **Credentials**: `reviewmachinecred`
-3. **Save**.
-
-### 5.1 Launch the Job Template
-
-1. Click **Launch** on `reviewtemplate`.
-2. The job runs `webserver.yml`. If it **Succeeds**, you see **Successful** in the job details.
-
-### 5.2 Verify
-
-- In a **web browser** or terminal:
-  ```bash
-  curl http://node1.lab.example.com
-  ```
-- Expect this text:
-  ```
-  Successful playbook run from automation controller.
-  ```
-
----
-
-## 6. Repeatability
-
-- **Delete or rename** the `reviewtemplate`, `reviewinventory`, `reviewmachinecred`, `reviewgitcred`, and `reviewproject` in Automation Controller.
-- Recreate them following the steps above.
-- If local changes are needed, remove or re-clone the `controller-review.git` repository.
-
----
-
-## 7. EX374 Exam Objectives Covered
-
-1. **Manage inventories and credentials**: You create a machine credential and add a new inventory.
-2. **Manage automation controller**: You create a project, run a playbook from Git, define a job template, and verify the output.
-3. **Understand and use Git**: You set up a source control credential and reference a Git repo.
-
-**Lab Complete!**
-
-<br><br><br><br>
-## Key Automation Controller Concepts (Summary)
-- `Automation Controller` centralizes execution and reporting of Ansible automation.
-- A `Project` points to a Git repo (plus optional credentials) to pull Ansible code.
-- A `Job Template` ties together inventory, credentials, execution environment, project, and playbook for automated runs.
-- Use the `Controller UI` to launch jobs and review their output.
-- Validate playbooks locally with `ansible-navigator` in an EE before deploying them in Controller.
+**Outcome**: You have structured a multi‑file static inventory, created two types of dynamic inventories, and defined both machine and source‑control credentials in Automation Controller, covering the RHCA objectives for advanced inventory & credentials.
