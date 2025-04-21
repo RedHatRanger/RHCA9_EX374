@@ -1,126 +1,105 @@
-**Lab 1: Git Project Setup**
+**Lab 1: Git Workflow for Ansible Projects**
 
 **Objectives**
 
-- Initialize a new Git repository for an Ansible project
-- Configure Git user identity and repository layout
-- Create, stage, and commit Ansible configuration and playbook files
-- Create feature branches and merge changes back to `main`
-- Push and pull from a remote Git repository hosted on `controller.lab.example.com`
+- Understand and use Git for Ansible project management:
+  - Clone a Git repository
+  - Create and switch to a new branch
+  - Stage and commit changes
+  - Push commits to a remote repository
 
 ---
 
-### Environment & Prerequisites
+### Environment
 
-- Control node: `controller.lab.example.com` (AAP 2.4)
-- Managed hosts: `node1.lab.example.com`–`node4.lab.example.com`
-- Ansible user: `rhel` (password `redhat` for SSH and sudo)
-- Ensure SSH password auth:
-  ```bash
-  ssh rhel@controller.lab.example.com  # enter password redhat
-  ```
+- **Control node:** controller.lab.example.com (AAP 2.4)  
+- **User:** `rhel`  
+- **SSH password:** `redhat`  
+- **Git repository URL:** `https://github.com/<YourUserName>/lab1.git`
 
 ---
 
-### Lab Steps
+### Steps
 
-1. **Install Git** on the control node:
+1. **SSH into the control node**
    ```bash
-   sudo yum install -y git
+   ssh rhel@controller.lab.example.com  # password: redhat
    ```
 
-2. **Configure global Git identity** for the `rhel` user:
+2. **Configure your Git identity**
    ```bash
-   git config --global user.name "rhel"
-   git config --global user.email "rhel@lab.example.com"
+   git config --global user.name "Your Name"
+   git config --global user.email you@example.com
    git config --global push.default simple
 
-   # Verify settings:
+   # Verify your settings:
    git config --global -l
    ```
 
-3. **Initialize a new Ansible project**:
+3. **Create and configure your GitHub repository**
+3.1 On any browser, navigate to https://github.com and log in or sign up for a free account.
+3.2 Click **+** (top right) then **New repository**.
+    - **Repository name:** lab1
+    - **Visibility:** Public (or Private, if you prefer)
+    - Leave other options at defaults, then click **Create repository**.
+3.3 On the new repo page, under **Quick setup**, copy the HTTPS URL (e.g. `https://github.com/<YourUsername>/lab1.git`).
+
+3.4 Back in your SSH session on `controller.lab.example.com`:
+```bash
+cd ~
+# Clone your GitHub repo
+git clone https://github.com/<YourUsername>/lab1.git
+cd lab1
+```
+
+4. **Create and switch to a new branch**
+ **Create and switch to a new branch**
    ```bash
-   mkdir -p ~/ansible-project
-   cd ~/ansible-project
-   git init
+   git checkout -b exercise
    ```
 
-4. **Create basic Ansible files**:
-   - `ansible.cfg`:
-     ```ini
-     [defaults]
-     inventory = ./inventories/prod/inventory
-     remote_user = rhel
-     host_key_checking = False
-     ```
+5. **Inspect the initial project files**
+   ```bash
+   tree
+   # ansible.cfg  site.yml  inventory
+   ```
 
-   - `site.yml`:
+6. **Modify the playbook**
+   - Open `site.yml` and add a descriptive play name:
      ```yaml
      ---
-     - name: Ping all hosts
+     - name: Ensure HTTP service on node1
        hosts: all
+       become: true
        tasks:
-         - name: Verify connectivity
-           ansible.builtin.ping:
+         - name: Install and start HTTPD
+           ansible.builtin.yum:
+             name: httpd
+             state: latest
+         - name: Ensure HTTPD is running
+           ansible.builtin.service:
+             name: httpd
+             enabled: true
+             state: started
      ```
 
-5. **Stage and commit** initial files:
+7. **Stage and commit your changes**
    ```bash
-   git add ansible.cfg site.yml
-   git commit -m "Initial scaffold: ansible.cfg and site.yml"
-   ```
-
-6. **Create a feature branch** `dev-setup` and add an NGINX play:
-   ```bash
-   git checkout -b dev-setup
-   cat << 'EOF' >> site.yml
-   - name: Install NGINX on web servers
-     hosts: webservers
-     become: true
-     tasks:
-       - name: Ensure nginx is installed
-         ansible.builtin.yum:
-           name: nginx
-           state: latest
-   EOF
    git add site.yml
-   git commit -m "Add nginx installation play for webservers"
+   git commit -m "Add descriptive play name and HTTPD tasks"
    ```
 
-7. **Merge** `dev-setup` into `main`:
+8. **Push the branch to the remote repository**
    ```bash
-   git checkout main
-   git merge dev-setup
-   ```
-
-8. **Create a bare repo** on the control node and push:
-   ```bash
-   mkdir -p ~/git-repos/ansible-project.git
-   cd ~/git-repos/ansible-project.git
-   git init --bare
-
-   cd ~/ansible-project
-   git remote add origin rhel@controller.lab.example.com:~/git-repos/ansible-project.git
-   git push -u origin main
-   ```
-
-9. **Validate** by cloning and listing inventory:
-   ```bash
-   cd ~
-   git clone rhel@controller.lab.example.com:~/git-repos/ansible-project.git test-clone
-   cd test-clone
-   ansible-inventory --list -i inventories/prod/inventory
+   git push -u origin exercise
    ```
 
 ---
 
-**Success Criteria**
+**Success criteria**
 
-- Git identity correctly set for `rhel` user
-- Project scaffold committed and pushed to remote
-- Feature branch merged into `main`
-- Fresh clone works and `ansible-inventory` lists hosts
+- `git log` shows your new commit on branch `exercise`  
+- `git branch -r` lists `origin/exercise`  
 
 *End of Lab 1*
 
