@@ -1,4 +1,4 @@
-**Lab 1: Git for Ansible Projects**
+**Lab 1: Understanding and Using Git**
 
 **Objectives**
 
@@ -104,23 +104,14 @@
    # ansible.cfg  inventory  site.yml
    ```
 
-7. **Run the playbook with Ansible‑Navigator**
+7. **Run the playbook using Ansible CLI**
 
-   7.1. (If needed) authenticate for EE pull:
+   Execute with `ansible-playbook`:
    ```bash
-   podman login hub.lab.example.com -u rhel -p redhat
+   ansible-playbook site.yml -i inventory
    ```
 
-   7.2. Execute in the supported EE:
-   ```bash
-   ansible-navigator run site.yml \
-     -i inventory \
-     --eei ee-supported-rhel8 \
-     --pp missing \
-     -m stdout
-   ```
-
-8. **Commit and push your changes**
+8. **Commit and push your changes****
    ```bash
    git add ansible.cfg site.yml inventory
    git commit -m "Initial HTTPD playbook with validation"
