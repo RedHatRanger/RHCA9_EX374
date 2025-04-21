@@ -2,10 +2,10 @@
 
 **Objectives**
 
-1. **Build a custom automation execution environment** using **ansible-builder** (Chapter 9: Writing Ansible Content Collections and Building Custom Execution Environments)  
-2. **Run playbooks** inside a specified execution environment with **ansible-navigator** (Chapter 9: Validating Custom Execution Environments)  
-3. **Upload execution environment images** to a private Automation Hub registry (Chapter 9: Managing Custom Execution Environments in Automation Controller)  
-4. **Configure and use** execution environments in Automation Controller 2.4 (Chapter 9: Deploying Execution Environments in Controller)  
+1. **Build a custom automation execution environment** using **ansible-builder**
+2. **Run playbooks** inside a specified execution environment with **ansible-navigator**
+3. **Upload execution environment images** to a private Automation Hub registry
+4. **Configure and use** execution environments in Automation Controller 2.4
 
 ---
 
